@@ -1,0 +1,12 @@
+.burger {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.burger div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+}

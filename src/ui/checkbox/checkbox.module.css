@@ -1,0 +1,57 @@
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.checkbox p {
+    cursor: pointer;
+}
+
+.checkbox input:checked + .visibleCheckbox .checked {
+    opacity: 1;
+}
+
+.checkbox input:checked + .visibleCheckbox .checked svg {
+    transform: scale(1);
+}
+
+.checkbox input:checked + .visibleCheckbox .checked:hover {
+    background-color: var(--accent-hover);
+}
+
+.visibleCheckbox {
+    position: relative;
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    margin-right: 15px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.checked {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background-color: var(--accent-color);
+    opacity: 0;
+    transition: opacity .1s ease;
+    transition: background-color .3s ease;
+}
+
+.checked svg {
+    width: 100%;
+    height: 100%;
+    transform: scale(0);
+    transition: transform .1s ease .1s;
+}

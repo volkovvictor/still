@@ -1,0 +1,13 @@
+.input {
+
+}
+.input input {
+    height: var(--button-base);
+    border: 3px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 0 30px;
+    color: var(--accent-color);
+}
+.label {
+
+}

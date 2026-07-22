@@ -1,0 +1,14 @@
+.container {
+    text-align: center;
+    padding-bottom: 50;
+}
+
+.title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-weight: normal;
+}

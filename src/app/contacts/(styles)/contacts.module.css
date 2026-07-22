@@ -1,0 +1,24 @@
+.contacts {
+    
+}
+.contacts p {
+    line-height: 1.3;
+    text-align: center;
+}
+
+.contactsLinks {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    line-height: 1.5;
+}
+
+.link span {
+    text-decoration: underline;
+}

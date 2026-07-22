@@ -1,0 +1,30 @@
+.account {
+    display: flex;
+    align-items: flex-start;
+}
+.accountPhoto {
+    flex: 0 0 400px;
+    height: 400px;
+}
+
+.accountPhoto img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.accountInfo {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-left: 50px;
+
+}
+
+.accountInfo li {
+    line-height: 1.5;
+}
+
+.accountInfo li span {
+    font-weight: 700;
+}

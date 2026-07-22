@@ -1,0 +1,35 @@
+.slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sliderBody {
+    overflow: hidden;
+}
+
+.sliderContainer {
+    display: flex;
+    margin: 0;
+}
+
+.slide {
+    flex: 0 0 20%;
+    max-height: 150px;
+    padding: 5px;
+}
+
+.slide img {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border: 1px solid var(--accent-color);
+}
+
+/* .slide:not(.slide:first-child) img {
+    border-left: none;
+} */
+
+.arrow:disabled {
+    opacity: 0.5;
+}

@@ -1,0 +1,19 @@
+
+.cart {
+    max-width: 1085px;
+    margin: 0 auto;
+}
+
+.cartFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.price span {
+    font-weight: 700;
+}
+
+.cartFooter button {
+    padding: 0 50px;
+}

@@ -1,0 +1,77 @@
+.select {
+    width: 50%;
+}
+.label {
+    font-size: 18px;
+    font-weight: 700;
+    padding-bottom: 5px;
+    z-index: 11;
+}
+.container {
+    position: relative;
+}
+.header {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--main-color);
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 0 20px;
+    width: 100%;
+    line-height: 50px;
+    transition: all .3s ease;
+    z-index: 11;
+}
+
+.header.open {
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+}
+
+.header svg {
+    transition: transform .3s ease;
+}
+
+.header.open svg {
+    transform: rotate(180deg);
+}
+
+.options {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    background-color: var(--main-color);
+    border: 2px solid var(--accent-color);
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+    opacity: 0;
+    transition: all .3s ease;
+}
+.options.open {
+    z-index: 10;
+    top: 55px;
+    opacity: 1;
+}
+.option {
+    line-height: 50px;
+    cursor: pointer;
+    transition: all .3s ease;
+    padding: 0 20px;
+}
+
+.option:not(.option:last-child) {
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.option:not(.option.disabled):hover {
+    background-color: var(--accent-color);
+    color: var(--main-color);
+}
+
+.option.disabled { 
+    background-color: #adadad;
+    opacity: 0.5;
+}
