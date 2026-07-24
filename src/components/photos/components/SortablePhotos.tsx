@@ -6,11 +6,10 @@ interface Props {
     photo: IPhoto,
     onLike: (id: string) => void,
     index: number,
-    isEdit?: boolean,
-    allChecked?: boolean
+    isEdit?: boolean
 }
 
-export default function SortablePhoto({photo, onLike, index, isEdit=true, allChecked=false}: Props) {
+export default function SortablePhoto({photo, onLike, index, isEdit=true}: Props) {
 
     const { ref } = useSortable({
         id: photo.id,

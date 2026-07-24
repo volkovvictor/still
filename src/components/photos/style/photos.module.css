@@ -67,6 +67,7 @@
 
 .action {
     width: fit-content;
+    cursor: pointer;
 }
 .action.choose {
     margin-right: auto;

@@ -9,6 +9,8 @@ import Button from '@/ui/button/Button'
 import { usePathname } from 'next/navigation'
 import locales from '@/locales/locales'
 import Checkbox from '@/ui/checkbox/Checkbox'
+import { useCallback, useEffect, useMemo } from 'react'
+import useAllCheck from '@/store/useAllCheck'
 
 interface Props {
     photo: IPhoto,
@@ -21,20 +23,30 @@ const locale = locales()
 
 export default function Photo({photo, onLike, ref, isEdit}: Props) {
 
+    const selectedIds = useAllCheck(state => state.selectedIds)
+    const onSelectId = useAllCheck(state => state.onSelectId)
+
     const pathname = usePathname()
     const isLiked = photo.isLiked && {
         fill: "#FF4757"
     }
 
-    console.log('pathname', pathname)
+    const isChecked = !!selectedIds.find(id => id === photo.id)
+
+    console.log('isChecked', isChecked)
+    // console.log('pathname', pathname)
+
+    const onChange = useCallback((val: boolean) => {
+        onSelectId(photo.id, val)
+    }, [onSelectId, photo])
 
     return (
         <div ref={ref} className={style.photoContainer}>
             {
                 (pathname === '/admin' && !isEdit) &&  ( // add admin role // edit
-                    <button className={`${style.action} ${style.choose}`}>
-                        <Checkbox size={20}/>
-                    </button>
+                    <div className={`${style.action} ${style.choose}`}>
+                        <Checkbox size={20} isChecked={isChecked} onChange={onChange}/>
+                    </div>
                 )
             }
             <div className={style.photo}>
@@ -57,9 +69,9 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
             </div>
             {
                 (pathname === '/admin' && !isEdit) && ( // add admin role // edit
-                    <button className={`${style.action} ${style.delete}`}>
+                    <div className={`${style.action} ${style.delete}`}>
                         <Icon name="trash" size={20}/>
-                    </button>
+                    </div>
                 )
             }
             {

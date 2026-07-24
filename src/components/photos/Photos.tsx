@@ -9,8 +9,7 @@ import Cells from './components/Cells'
 
 interface Props {
     photos: IPhoto[],
-    isEdit?: boolean,
-    allChecked?: boolean
+    isEdit?: boolean
 }
 
 export default function Photos({photos, isEdit=false}: Props) {

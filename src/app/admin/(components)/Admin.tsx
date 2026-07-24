@@ -3,7 +3,7 @@
 import style from '../(style)/admin.module.css'
 import Tabs from "@/ui/tabs/Tabs";
 import locales from "@/locales/locales";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Photos from "@/components/photos/Photos";
 import Checkbox from "@/ui/checkbox/Checkbox";
 import Icon from '@/ui/icon/Icon';
@@ -22,6 +22,7 @@ import photo4 from '@/assets/4.jpg'
 import photo5 from '@/assets/5.jpg' 
 import Button from '@/ui/button/Button';
 import Title from '@/ui/title/Title';
+import useAllCheck from '@/store/useAllCheck';
 
 
 const data: IPhoto[] = [ //delete
@@ -83,14 +84,37 @@ export default function Admin() {
     const [activeTab, setActiveTab] = useState<string>("main")
     const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false)
     const [ isEdit, setIsEdit ] = useState<boolean>(false)
-    const [allChecked, setAllChecked] = useState<boolean>(false)
+
+    const { isSelectAllChecked, selectedIds, toggleAllCheck, clearAll } = useAllCheck()
+
+    const photosIds = useMemo(() => data.map(photo => photo.id), [])
+
+    const onChange = useCallback((val: boolean) => {
+        toggleAllCheck(photosIds, val)
+    }, [photosIds, toggleAllCheck])
+
+    useEffect(() => {
+        if (isEdit) {
+            clearAll()
+        }
+    }, [isEdit, clearAll])
+
+    useEffect(() => {
+        if (selectedIds.length < photosIds.length) {
+            toggleAllCheck(photosIds, false)
+        }
+    }, [photosIds, toggleAllCheck, selectedIds])
 
     return (
         <>
             <div className={style.admin}>
                 <Tabs tabs={tabs} setTabs={setTabs} setActiveTab={setActiveTab}/>
                 <div className={style.actions}>
-                    <Checkbox text={locale.chooseAll} textWeight={700} setAllChecked={setAllChecked}/>
+                    <Checkbox 
+                        text={locale.chooseAll} 
+                        textWeight={700} 
+                        isChecked={isSelectAllChecked} 
+                        onChange={onChange}/>
                     <div className={style.tools}>
                         <div className={style.tool} onClick={() => setIsModalOpen(true)}>
                             <Icon name="add" size={35} stroke={MAIN_COLOR}/>
@@ -109,7 +133,7 @@ export default function Admin() {
                         </div>
                     )
                 }
-                <Photos photos={data} isEdit={isEdit} allChecked={allChecked}/>
+                <Photos photos={data} isEdit={isEdit}/>
             </div>
             {
                 isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>
