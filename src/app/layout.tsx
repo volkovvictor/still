@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, IM_Fell_French_Canon } from "next/font/google";
 import "./globals.css";
 import setUiVariables from "@/utils/setUiVariables";
+import { ThemeProvider } from "next-themes";
 import Header from "@/layouts/header/Header";
 import Footer from "@/layouts/footer/Footer";
 
@@ -23,19 +24,22 @@ export const metadata: Metadata = {
 
 const variables = setUiVariables() as React.CSSProperties
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" style={variables} className={`${roboto.variable} ${imFellFrenchCanon.variable}`}>
+    <html lang="ru" style={variables} className={`${roboto.variable} ${imFellFrenchCanon.variable}`} suppressHydrationWarning>
       <body>
-        <Header/>
-        <main>
-          <div className="container">{children}</div>
-        </main>
-        <Footer/>
+        <ThemeProvider themes={["dark", "light"]}>
+            <Header/>
+            <main>
+              <div className="container">{children}</div>
+            </main>
+            <Footer/>
+        </ThemeProvider>
       </body>
     </html>
   );

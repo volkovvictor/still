@@ -3,3 +3,5 @@ export interface ITabs {
     value: string,
     isActive: boolean
 }
+
+export type ThemeType = "light" | "dark"

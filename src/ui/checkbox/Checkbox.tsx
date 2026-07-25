@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import Icon from '../icon/Icon'
 import style from './checkbox.module.css'
-import { MAIN_COLOR, TEXT_SM } from '@/constants/ui'
+import useColors from '@/hooks/useColors'
+import { TEXT_SM } from '@/constants/ui'
 
 interface Props {
     text?: string,
@@ -24,6 +25,8 @@ export default function Checkbox(
         textWeight=400,
     }: Props) {
 
+    const { MAIN_COLOR } = useColors()
+ 
     const [checked, setChecked] = useState<boolean>(isChecked)
 
     const isControlled = onChange !== undefined

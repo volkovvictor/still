@@ -1,22 +1,21 @@
+'use client'
+
 import Icon, { IconNames } from '../icon/Icon'
-import { MAIN_COLOR, ACCENT_COLOR } from '@/constants/ui'
+import useColors from '@/hooks/useColors'
+import style from './switchTheme.module.css'
 
 interface Props {
     iconName: IconNames,
-    theme: "light" | "dark",
     onSwitch: () => void
 }
 
-export default function SwitchThemeIcon({ iconName, theme, onSwitch }: Props) {
-    const lightStyle = iconName === 'sun' && theme === 'light'
-    const darkStyle = iconName === 'moon' && theme === 'dark'
-
-    const style = (lightStyle || darkStyle) ? {} : { opacity: 0.7 }
-    const color = iconName === 'sun' ? MAIN_COLOR : iconName === "moon" ? ACCENT_COLOR : "transparent"
+export default function SwitchThemeIcon({ iconName, onSwitch }: Props) {
+    const { MAIN_COLOR, ACCENT_COLOR } = useColors()
+    const color = iconName === 'sun' ? MAIN_COLOR : ACCENT_COLOR
 
     return (
-        <button onClick={onSwitch}>
-            <Icon name={iconName} stroke={color} style={style}/>
+        <button onClick={onSwitch} className={style[`${iconName}Button`]}>
+            <Icon name={iconName} stroke={color}/>
         </button>
     )
 }

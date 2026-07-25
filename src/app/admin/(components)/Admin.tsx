@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Photos from "@/components/photos/Photos";
 import Checkbox from "@/ui/checkbox/Checkbox";
 import Icon from '@/ui/icon/Icon';
-import { MAIN_COLOR, TEXT_BASE, TEXT_SM } from '@/constants/ui';
+import useColors from '@/hooks/useColors';
 import AddModal from './AddModal';
 import type { ITabs } from '@/types/general.type';
 import type { IPhoto } from "@/types/photos.type";
@@ -79,6 +79,8 @@ const defTabs: ITabs[] = [
 ]
 
 export default function Admin() {
+
+    const { MAIN_COLOR } = useColors()
 
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
     const [activeTab, setActiveTab] = useState<string>("main")

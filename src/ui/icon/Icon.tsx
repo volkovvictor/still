@@ -1,3 +1,5 @@
+'use client'
+
 import { 
     UserIcon,
     LoginIcon,
@@ -17,14 +19,19 @@ import {
     CloseIcon,
     CheckIcon,
     ArrowDownIcon } from "./Icons"
-import { ACCENT_COLOR, ICON_SIZE } from "@/constants/ui"
+import { ICON_SIZE } from "@/constants/ui"
+import useColors from "@/hooks/useColors"
+import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
+import { ThemeType } from "@/types/general.type"
 
 export interface IconI {
     fill?: string,
     stroke?: string,
     size?: number,
     strokeWidth?: number,
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
+    vkIconColor?: ThemeType
 }
 
 export type IconNames = 
@@ -51,14 +58,6 @@ interface Props extends IconI {
     name: IconNames
 }
 
-const defaultProps: IconI = {
-    fill: 'transparent',
-    stroke: ACCENT_COLOR,
-    size: ICON_SIZE,
-    strokeWidth: 2,
-    style: {}
-}
-
 const Icons: Record<IconNames, React.FC<IconI>> = {
     user: UserIcon,
     login: LoginIcon,
@@ -82,17 +81,39 @@ const Icons: Record<IconNames, React.FC<IconI>> = {
 
 export default function Icon ({ 
     name, 
-    fill = defaultProps.fill, 
-    stroke = defaultProps.stroke, 
-    size = defaultProps.size, 
-    strokeWidth = defaultProps.strokeWidth,
-    style = defaultProps.style
+    fill, 
+    stroke, 
+    size, 
+    strokeWidth,
+    style
 }: Props) {
+    const [mounted, setMounted] = useState<boolean>(false)
+    const { theme } = useTheme()
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
     const Component = Icons[name]
+    const { ACCENT_COLOR } = useColors()
 
     if (!Component) return null;
 
+    const safeColor = mounted ? stroke || ACCENT_COLOR : "#fff"
+    const vkIconColor = mounted ? theme as ThemeType : "light"
+
+    const defaultProps: IconI = {
+        fill: fill || 'transparent',
+        stroke: safeColor,
+        size: size || ICON_SIZE,
+        strokeWidth: strokeWidth || 2,
+        style: style || {},
+        vkIconColor: vkIconColor
+    }
+
+    console.log('defaultProps', defaultProps.stroke)
+
     return (
-        <Component fill={fill} stroke={stroke} size={size} strokeWidth={strokeWidth} style={style}/>
+        <Component {...defaultProps}/>
     )
 }

@@ -1,6 +1,7 @@
 import { IconI } from "./Icon"
 import Image from "next/image"
-import vk from '@/assets/vk-logo-g.png'
+import vkDark from '@/assets/vk-logo-g.png'
+import vkLight from '@/assets/vk-logo-w.png'
 
 export const UserIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {
     return (
@@ -60,8 +61,10 @@ export const EmailIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {
     )
 }
 
-export const VkIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {
-    return <Image src={vk} alt="VK" style={{...style, minWidth: size, minHeight: size, maxHeight: size, maxWidth: size}} width={size} height={size}/>
+export const VkIcon = ({fill, stroke, size, strokeWidth, style, vkIconColor}: IconI) => {
+    const src = vkIconColor === "light" ? vkDark : vkLight
+    
+    return <Image src={src} alt="VK" style={{...style, minWidth: size, minHeight: size, maxHeight: size, maxWidth: size}} width={size} height={size}/>
 }
 
 export const FavoriteIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {

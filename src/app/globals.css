@@ -1,11 +1,23 @@
+:root {
+  --main-color: #ffffff;
+  --accent-color: #4D4D4D;
+  --accent-hover: #323232;
+  --opacity-bg-color: rgba(77, 77, 77, 0.7);
+}
+[data-theme="dark"] {
+  --main-color: #4D4D4D;
+  --accent-color: #ffffff;
+  --accent-hover: #cdcdcd;
+  --opacity-bg-color: rgba(255, 255, 255, 0.7);
+}
 *, *::before, *::after {
   box-sizing: border-box;
 }
-
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--main-color);
   font-family: var(--font-roboto);
   font-size: var(--text-base);
   color: var(--accent-color);
