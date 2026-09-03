@@ -111,8 +111,6 @@ export default function Icon ({
         vkIconColor: vkIconColor
     }
 
-    console.log('defaultProps', defaultProps.stroke)
-
     return (
         <Component {...defaultProps}/>
     )

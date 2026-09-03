@@ -33,15 +33,16 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
 
     const isChecked = !!selectedIds.find(id => id === photo.id)
 
-    console.log('isChecked', isChecked)
-    // console.log('pathname', pathname)
-
     const onChange = useCallback((val: boolean) => {
         onSelectId(photo.id, val)
     }, [onSelectId, photo])
 
+    console.log('photo.width', photo.width)
+
     return (
-        <div ref={ref} className={style.photoContainer}>
+        <div ref={ref} className={style.photoContainer} style={{
+            gridRow: `span ${photo.size}`
+        }}>
             {
                 (pathname === '/admin' && !isEdit) &&  ( // add admin role // edit
                     <div className={`${style.action} ${style.choose}`}>
@@ -50,7 +51,8 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
                 )
             }
             <div className={style.photo}>
-                <Image src={photo.src} alt={photo.alt}/>
+                {/* return Image edit */}
+                <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height}/>
                 {
                     pathname === "/account" && (
                         <button className={style.like} onClick={onLike}>

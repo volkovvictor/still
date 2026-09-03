@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Icon from '../icon/Icon'
 import style from './select.module.css'
 
@@ -11,10 +11,11 @@ interface Option {
 
 interface Props {
     options: Option[],
-    label?: string
+    label?: string,
+    setSelectedOption?: (option: any) => void
 }
 
-export default function Select ({options, label}: Props) {
+export default function Select ({options, label, setSelectedOption}: Props) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selected, setIsSelected] = useState<Option>(options[0])
@@ -24,6 +25,10 @@ export default function Select ({options, label}: Props) {
         if (option.value !== selected.value) {
             setIsSelected(option)
             setIsOpen(false)
+
+                if (setSelectedOption) {
+                    setSelectedOption(option.value)
+                }
         }
     }
 

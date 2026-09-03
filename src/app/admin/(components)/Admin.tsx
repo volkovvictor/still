@@ -135,7 +135,7 @@ export default function Admin() {
                         </div>
                     )
                 }
-                <Photos photos={data} isEdit={isEdit}/>
+                <Photos isEdit={isEdit}/>
             </div>
             {
                 isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>

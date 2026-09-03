@@ -1,7 +1,7 @@
 export default function locales() {
     return {
         main: "Главная",
-        account: "Личный кабинет",
+        account: "Профиль",
         portfolio: "Портфолио",
         contacts: "Контакты",
         cart: "Корзина",

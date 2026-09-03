@@ -15,7 +15,7 @@ export default async function Cart() {
             <Title title={locale.cart}/>
             <Slider style={{ margin: "50px 0" }}/>
             <div className={style.cartFooter}>
-                <p className={style.price}>4 фото - <span>4000</span> рублей</p>
+                <p className={style.price}><span>4000</span> рублей</p>
                 <Button>{locale.order}</Button>
             </div>
         </div>
