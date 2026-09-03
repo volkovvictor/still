@@ -21,8 +21,7 @@ export default function TypePhotos({photosType, isEdit}: Props) {
     useEffect(() => {
         getPhotos(photosType)
     }, [photosType])
-
-    console.log('photos', photos)
+    
 
     const onLike = useCallback((id: string) => {
         const likedPhoto = photos.find(photo => photo.id === id) // edit
@@ -55,7 +54,7 @@ export default function TypePhotos({photosType, isEdit}: Props) {
                 photos.map((photo, index) => {
                     if (isEdit) {
                         return <SortablePhoto 
-                                key={photo._id}
+                                key={photo.id}
                                 photo={photo}
                                 onLike={() => onLike(photo.id)}
                                 index={index}
