@@ -170,3 +170,21 @@ export const ArrowDownIcon = ({fill, stroke, size, strokeWidth, style}: IconI) =
         </svg>
     )
 }
+
+export const LoaderIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style={{...style, minWidth: size, minHeight: size, maxHeight: size, maxWidth: size}} width={size} height={size}>
+            <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill={fill}
+                stroke={stroke}
+                stroke-width={strokeWidth}
+                stroke-linecap="round"
+                stroke-dasharray="220 30"
+                transform="rotate(-90 50 50)"
+            />
+            </svg>
+    )
+}

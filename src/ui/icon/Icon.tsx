@@ -18,7 +18,8 @@ import {
     AddIcon,
     CloseIcon,
     CheckIcon,
-    ArrowDownIcon } from "./Icons"
+    ArrowDownIcon,
+    LoaderIcon } from "./Icons"
 import { ICON_SIZE } from "@/constants/ui"
 import useColors from "@/hooks/useColors"
 import { useEffect, useState } from "react"
@@ -52,7 +53,8 @@ export type IconNames =
     'add' |
     'close' |
     'check' |
-    'arrowDown'
+    'arrowDown' |
+    'loader'
 
 interface Props extends IconI {
     name: IconNames
@@ -76,7 +78,8 @@ const Icons: Record<IconNames, React.FC<IconI>> = {
     add: AddIcon,
     close: CloseIcon,
     check: CheckIcon,
-    arrowDown: ArrowDownIcon
+    arrowDown: ArrowDownIcon,
+    loader: LoaderIcon,
 }
 
 export default function Icon ({ 

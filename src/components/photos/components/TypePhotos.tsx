@@ -8,6 +8,9 @@ import SortablePhoto from './SortablePhotos'
 import Cells from './Cells'
 import { useGetPhotos } from '../hooks/usePhotosApi'
 import usePhotos from '@/store/usePhotos'
+import Empty from '@/components/empty/Empty'
+import locales from '@/locales/locales'
+import Loader from '@/ui/loader/Loader'
 
 interface Props {
     photosType: PhotoTypes,
@@ -15,8 +18,10 @@ interface Props {
 }
 
 export default function TypePhotos({photosType, isEdit}: Props) {
+    const locale = locales()
     const getPhotos = useGetPhotos()
     const photos = usePhotos(state => state[photosType])
+    const isPhotosLoading = usePhotos(state => state.isPhotosLoading)
 
     useEffect(() => {
         getPhotos(photosType)
@@ -41,33 +46,45 @@ export default function TypePhotos({photosType, isEdit}: Props) {
     // console.log('cells', cells)
 
     return (
-        <div style={{position: 'relative'}}>
+        <>
             {
-                isEdit && (
-                    <div className={style.cells}>
-                        <Cells cells={cells}/>
-                    </div>
-                )
-            }
-            <div className={`${style.photos} ${isEdit ? " " + style.edit : ""}`}>
-            {
-                photos.map((photo, index) => {
-                    if (isEdit) {
-                        return <SortablePhoto 
-                                key={photo.id}
-                                photo={photo}
-                                onLike={() => onLike(photo.id)}
-                                index={index}
-                                isEdit={isEdit}/>
-                    }
+                isPhotosLoading 
+                    ? 
+                    <Loader/>
+                    :
+                    photos.length === 0 
+                        ?
+                        <Empty text={locale.noPhotos}/>
+                        :
+                        <div style={{position: 'relative'}}>
+                            {
+                                isEdit && (
+                                    <div className={style.cells}>
+                                        <Cells cells={cells}/>
+                                    </div>
+                                )
+                            }
+                            <div className={`${style.photos} ${isEdit ? " " + style.edit : ""}`}>
+                            {
+                                photos.map((photo, index) => {
+                                    if (isEdit) {
+                                        return <SortablePhoto 
+                                                key={photo.id}
+                                                photo={photo}
+                                                onLike={() => onLike(photo.id)}
+                                                index={index}
+                                                isEdit={isEdit}/>
+                                    }
 
-                    return <Photo 
-                            key={photo.id} 
-                            photo={photo}
-                            onLike={() => onLike(photo.id)} />
-                })
-            }
-        </div>
-        </div>
+                                    return <Photo 
+                                            key={photo.id} 
+                                            photo={photo}
+                                            onLike={() => onLike(photo.id)} />
+                                })
+                            }
+                        </div>
+                        </div>
+            } 
+        </>
     )
 }

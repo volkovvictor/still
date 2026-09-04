@@ -52,7 +52,7 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
             }
             <div className={style.photo}>
                 {/* return Image edit */}
-                <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height}/>
+                <Image src={photo.src} alt={photo.photoPublicId} width={photo.width} height={photo.height}/>
                 {
                     pathname === "/account" && (
                         <button className={style.like} onClick={onLike}>

@@ -10,7 +10,7 @@ import Icon from '@/ui/icon/Icon';
 import useColors from '@/hooks/useColors';
 import AddModal from './AddModal';
 import type { ITabs } from '@/types/general.type';
-import type { IPhoto } from "@/types/photos.type";
+import type { IPhoto, PhotoTypes } from "@/types/photos.type";
 
 const locale = locales()
 
@@ -83,7 +83,7 @@ export default function Admin() {
     const { MAIN_COLOR } = useColors()
 
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
-    const [activeTab, setActiveTab] = useState<string>("main")
+    const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
     const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false)
     const [ isEdit, setIsEdit ] = useState<boolean>(false)
 
@@ -135,7 +135,7 @@ export default function Admin() {
                         </div>
                     )
                 }
-                <Photos isEdit={isEdit}/>
+                <Photos isEdit={isEdit} activeTab={activeTab}/>
             </div>
             {
                 isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>

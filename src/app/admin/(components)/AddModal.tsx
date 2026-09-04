@@ -50,7 +50,7 @@ export default function AddModal({closeModal}: Props) {
         }
     }
 
-    const addPhotos = useCallback((e) => {
+    const addPhotos = useCallback((e: React.SubmitEvent) => {
         e.preventDefault()
 
         if (!files) return

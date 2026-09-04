@@ -4,7 +4,7 @@ export type PhotoTypes = 'preview' | 'portfolio' | 'account'
 export interface IPhoto {
     id: string,
     src: string | StaticImageData,
-    alt: string,
+    photoPublicId: string,
     position: number,
     size: number,
     type: PhotoTypes,
