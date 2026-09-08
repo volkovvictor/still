@@ -37,8 +37,6 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
         onSelectId(photo.id, val)
     }, [onSelectId, photo])
 
-    console.log('photo.width', photo.width)
-
     return (
         <div ref={ref} className={style.photoContainer} style={{
             gridRow: `span ${photo.size}`

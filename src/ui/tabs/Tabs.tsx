@@ -4,17 +4,17 @@ import { ITabs } from '@/types/general.type'
 interface Props {
     tabs: ITabs[]
     setTabs: (tabs: ITabs[]) => void,
-    setActiveTab: (tabName: string) => void
+    onChangeTab: (tabName: string) => void
 }
 
-export default function Tabs({tabs, setTabs, setActiveTab}: Props) {
+export default function Tabs({tabs, setTabs, onChangeTab}: Props) {
 
     const handleTab = (curTab: ITabs) => {
         const newTabs = tabs.map(tab => {
 
             if (tab === curTab) {
                 tab.isActive = true
-                setActiveTab(tab.name)
+                onChangeTab(tab.name)
             } else {
                 tab.isActive = false
             }

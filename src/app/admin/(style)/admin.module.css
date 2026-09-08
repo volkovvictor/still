@@ -1,13 +1,12 @@
-.admin {
-}
 .actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin: 50px 0;
 }
 .tools {
+    flex: 1 1 auto;
     display: flex;
+    justify-content: flex-end;
     gap: 15;
 }
 .tool {

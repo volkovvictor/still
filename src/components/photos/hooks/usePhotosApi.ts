@@ -12,11 +12,10 @@ export function useGetPhotos () {
         setIsPhotosLoading(true)
         try {
             const path = `${GET_BY_TYPE}/${photosType}`
-            const data = await apiFetch({ path })
+            const data: IPhoto[] = await apiFetch({ path })
+            const photos = data.map(photo => ({ ...photo, id: photo._id }))
 
-            console.log('data', data)
-
-            setPhotos(photosType, data)
+            setPhotos(photosType, photos)
             setIsPhotosLoading(false)
         } catch(err) {
             console.log('err', err)
@@ -33,8 +32,6 @@ export function useCreatePhotos () {
         setIsPhotosLoading(true)
         try {
             const path = PHOTOS_URL
-            console.log('path', path)
-            console.log('body', body)
             await apiFetch({ path, method: "POST", body })
             setIsPhotosLoading(false)
         } catch(err) {

@@ -11,58 +11,15 @@ import useColors from '@/hooks/useColors';
 import AddModal from './AddModal';
 import type { ITabs } from '@/types/general.type';
 import type { IPhoto, PhotoTypes } from "@/types/photos.type";
+import Button from '@/ui/button/Button';
+import useAllCheck from '@/store/useAllCheck';
+import usePhotos from '@/store/usePhotos';
 
 const locale = locales()
 
-//delete
-import photo1 from '@/assets/1.jpg' 
-import photo2 from '@/assets/2.jpg' 
-import photo3 from '@/assets/3.jpg' 
-import photo4 from '@/assets/4.jpg' 
-import photo5 from '@/assets/5.jpg' 
-import Button from '@/ui/button/Button';
-import Title from '@/ui/title/Title';
-import useAllCheck from '@/store/useAllCheck';
-
-
-const data: IPhoto[] = [ //delete
-    {
-        id: "1",
-        src: photo1,
-        alt: "photo_1",
-        position: 1,
-    },
-    {
-        id: "2",
-        src: photo2,
-        alt: "photo_2",
-        position: 2,
-        isLiked: true
-    },
-    {
-        id: "3",
-        src: photo3,
-        alt: "photo_3",
-        position: 3,
-        isAddedToCart: true
-    },
-    {
-        id: "4",
-        src: photo4,
-        alt: "photo_4",
-        position: 4,
-    },
-    {
-        id: "5",
-        src: photo5,
-        alt: "photo_5",
-        position: 5,
-    },
-]
-
 const defTabs: ITabs[] = [
     {
-        name: "main",
+        name: "preview",
         value: locale.main,
         isActive: true
     },
@@ -72,8 +29,8 @@ const defTabs: ITabs[] = [
         isActive: false
     },
     {
-        name: "photoschoot",
-        value: locale.photoschoot,
+        name: "account",
+        value: locale.account,
         isActive: false
     },
 ]
@@ -82,6 +39,8 @@ export default function Admin() {
 
     const { MAIN_COLOR } = useColors()
 
+    const photos = usePhotos()
+
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
     const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
     const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false)
@@ -89,11 +48,18 @@ export default function Admin() {
 
     const { isSelectAllChecked, selectedIds, toggleAllCheck, clearAll } = useAllCheck()
 
-    const photosIds = useMemo(() => data.map(photo => photo.id), [])
+    const photosIds = useMemo(() => photos[activeTab].map(photo => photo.id), [activeTab, photos])
+
+    console.log('photos', photos)
+    console.log('photosIds', photosIds)
 
     const onChange = useCallback((val: boolean) => {
         toggleAllCheck(photosIds, val)
     }, [photosIds, toggleAllCheck])
+
+    const onChangeTab = useCallback((val: PhotoTypes) => {
+        setActiveTab(val)
+    }, [])
 
     useEffect(() => {
         if (isEdit) {
@@ -105,25 +71,34 @@ export default function Admin() {
         if (selectedIds.length < photosIds.length) {
             toggleAllCheck(photosIds, false)
         }
+        if (selectedIds.length === photosIds.length) {
+            toggleAllCheck(photosIds, true)
+        }
     }, [photosIds, toggleAllCheck, selectedIds])
 
     return (
         <>
             <div className={style.admin}>
-                <Tabs tabs={tabs} setTabs={setTabs} setActiveTab={setActiveTab}/>
+                <Tabs tabs={tabs} setTabs={setTabs} onChangeTab={(val) => onChangeTab(val as PhotoTypes)}/>
                 <div className={style.actions}>
-                    <Checkbox 
-                        text={locale.chooseAll} 
-                        textWeight={700} 
-                        isChecked={isSelectAllChecked} 
-                        onChange={onChange}/>
+                    {
+                        photosIds.length > 0 && <Checkbox 
+                                                    text={locale.chooseAll} 
+                                                    textWeight={700} 
+                                                    isChecked={isSelectAllChecked} 
+                                                    onChange={onChange}/>
+                    }
                     <div className={style.tools}>
                         <div className={style.tool} onClick={() => setIsModalOpen(true)}>
                             <Icon name="add" size={35} stroke={MAIN_COLOR}/>
                         </div>
-                        <div className={`${style.tool}${isEdit ? " " + style.active : ""}`} onClick={() => setIsEdit(!isEdit)}>
-                            <Icon name="edit" size={35} stroke={MAIN_COLOR}/>
-                        </div>
+                        {
+                            photosIds.length > 0 && (
+                                <div className={`${style.tool}${isEdit ? " " + style.active : ""}`} onClick={() => setIsEdit(!isEdit)}>
+                                    <Icon name="edit" size={35} stroke={MAIN_COLOR}/>
+                                </div>
+                        )
+                        }
                     </div>
                 </div>
                 {

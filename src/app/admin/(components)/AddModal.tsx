@@ -21,15 +21,15 @@ const locale = locales()
 const options = [
     {
         name: locale.main,
-        value: "main"
+        value: "preview"
     },
     {
         name: locale.portfolio,
         value: "portfolio"
     },
     {
-        name: locale.photoschoot,
-        value: "photoschoot",
+        name: locale.account,
+        value: "account",
     },
 ]
 
@@ -53,11 +53,11 @@ export default function AddModal({closeModal}: Props) {
     const addPhotos = useCallback((e: React.SubmitEvent) => {
         e.preventDefault()
 
+        console.log('category', category)
+
         if (!files) return
 
         const photosLength = photos[category].length
-
-        console.log('files', files.length)
 
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData()
@@ -70,11 +70,11 @@ export default function AddModal({closeModal}: Props) {
                 formData.append('userID', selectedUserID)
             }
 
-            console.log(Object.fromEntries(formData))
-
             createPhotos(formData)
         }
-    }, [category, files, photos, selectedUserID, createPhotos])
+
+        closeModal()
+    }, [category, files, photos, selectedUserID, createPhotos, closeModal])
 
     const onSelect = useCallback((option: PhotoTypes) => {
         setCategory(option)

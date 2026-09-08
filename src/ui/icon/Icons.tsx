@@ -180,9 +180,9 @@ export const LoaderIcon = ({fill, stroke, size, strokeWidth, style}: IconI) => {
                 r="40"
                 fill={fill}
                 stroke={stroke}
-                stroke-width={strokeWidth}
-                stroke-linecap="round"
-                stroke-dasharray="220 30"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray="220 30"
                 transform="rotate(-90 50 50)"
             />
             </svg>

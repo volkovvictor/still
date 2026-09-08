@@ -10,8 +10,6 @@ export default async function apiFetch ({path, method='GET', body, headers}: Par
         const res = await fetch(path, { method, body, headers })
         const data = await res.json()
 
-        console.log('datafetch', data)
-
         return data
     } catch (err) {
         console.log('err', err)
