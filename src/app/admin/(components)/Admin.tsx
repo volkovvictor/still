@@ -50,9 +50,6 @@ export default function Admin() {
 
     const photosIds = useMemo(() => photos[activeTab].map(photo => photo.id), [activeTab, photos])
 
-    console.log('photos', photos)
-    console.log('photosIds', photosIds)
-
     const onChange = useCallback((val: boolean) => {
         toggleAllCheck(photosIds, val)
     }, [photosIds, toggleAllCheck])

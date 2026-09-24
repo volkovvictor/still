@@ -7,11 +7,12 @@ interface Props {
     name: string,
     label?: string,
     value?: string,
-    type?: "text" | "password" | "number",
-    placeholder?: string
+    type?: "text" | "password" | "number" | "date",
+    placeholder?: string,
+    onChange?: (value: any) => void
 }
 
-export default function Input({ name, label, value="", type="text", placeholder="" }: Props) {
+export default function Input({ name, label, value="", type="text", placeholder="", onChange }: Props) {
 
     const [ inputValue, setInputValue ] = useState<string>(value)
 
@@ -21,9 +22,15 @@ export default function Input({ name, label, value="", type="text", placeholder=
             <input 
                 type={type} 
                 name={name} 
-                value={inputValue} 
+                value={value || inputValue} 
                 placeholder={placeholder}
-                onChange={(e) => setInputValue(e.target.value)}/>
+                onChange={(e) => {
+                    if (onChange) {
+                        onChange(e.target.value)
+                    } else {
+                        setInputValue(e.target.value)
+                    }
+                }}/>
         </label>
     )
 }

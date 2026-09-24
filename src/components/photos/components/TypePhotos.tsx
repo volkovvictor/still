@@ -6,32 +6,67 @@ import type { IPhoto, PhotoTypes } from '@/types/photos.type'
 import { useCallback, useEffect, useMemo } from 'react'
 import SortablePhoto from './SortablePhotos'
 import Cells from './Cells'
-import { useGetPhotos } from '../hooks/usePhotosApi'
+import { useDeletePhotos, useGetPhotos } from '../hooks/usePhotosApi'
+import { useGetPhotoshoots } from '../hooks/usePhotoshootApi'
 import usePhotos from '@/store/usePhotos'
 import Empty from '@/components/empty/Empty'
 import locales from '@/locales/locales'
 import Loader from '@/ui/loader/Loader'
+import { ParamValue } from 'next/dist/server/request/params'
+import usePhotoshoots from '@/store/usePhotoshoots'
 
 interface Props {
     photosType: PhotoTypes,
+    photoshootID?: ParamValue | false,
     isEdit: boolean
 }
 
-export default function TypePhotos({photosType, isEdit}: Props) {
+export default function TypePhotos({photosType, photoshootID, isEdit}: Props) {
     const locale = locales()
     const getPhotos = useGetPhotos()
-    const photos = usePhotos(state => state[photosType])
+    const getPhotoshoots = useGetPhotoshoots()
+    const deletePhoto = useDeletePhotos()
+
+    const photosByType = usePhotos(state => state[photosType])
     const isPhotosLoading = usePhotos(state => state.isPhotosLoading)
+    const photoshoots = usePhotoshoots(state => state.photoshoots)
+    const isPhotoshootLoading = usePhotoshoots(state => state.isPhotoshootLoading)
+
+    const isPhotoshootsPreviews = useMemo(() => photosType === 'portfolio' && !photoshootID, [photosType, photoshootID])
+
+    console.log('photoshootID', photoshootID)
 
     useEffect(() => {
-        getPhotos(photosType)
-    }, [photosType])
-    
+        if (isPhotoshootsPreviews) {
+            getPhotoshoots()
+        } else {
+            getPhotos(photosType)
+        }
+    }, [photosType, isPhotoshootsPreviews])
 
+    console.log('photosByType', photosByType)
+
+    const photos = useMemo(() => {
+        return isPhotoshootsPreviews
+        ? photoshoots.map(photoshoot => ({
+            ...photoshoot,
+            src: photoshoot.previewSrc,
+            photoPublicId: photoshoot.previewPhotoPublicId
+        }))
+        : photoshootID
+            ? photosByType.filter(photo => photo.photoshootID === photoshootID)
+            : photosByType
+    }, [photoshootID, photosByType, isPhotoshootsPreviews, photoshoots])
+    
     const onLike = useCallback((id: string) => {
         const likedPhoto = photos.find(photo => photo.id === id) // edit
-        console.log(likedPhoto)
     }, [photos])
+
+    const onDelete = useCallback((id: string) => {
+        deletePhoto(photosType, id)
+    }, [photosType, deletePhoto])
+
+    console.log('photos', photos)
 
     const cells = useMemo(() => {
         const cellsData = []
@@ -71,6 +106,7 @@ export default function TypePhotos({photosType, isEdit}: Props) {
                                         return <SortablePhoto 
                                                 key={photo.id}
                                                 photo={photo}
+                                                onDelete={() => onDelete(photo.id)}
                                                 onLike={() => onLike(photo.id)}
                                                 index={index}
                                                 isEdit={isEdit}/>
@@ -79,6 +115,7 @@ export default function TypePhotos({photosType, isEdit}: Props) {
                                     return <Photo 
                                             key={photo.id} 
                                             photo={photo}
+                                            onDelete={() => onDelete(photo.id)}
                                             onLike={() => onLike(photo.id)} />
                                 })
                             }

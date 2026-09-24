@@ -1,7 +1,7 @@
 'use client'
 
 import type { PhotoTypes } from '@/types/photos.type'
-import { usePathname } from 'next/navigation'
+import { usePathname, useParams } from 'next/navigation'
 import TypePhotos from './components/TypePhotos'
 
 interface Props {
@@ -11,12 +11,16 @@ interface Props {
 
 export default function Photos({ isEdit = false, activeTab }:Props) {
     const pathname = usePathname()
-    const photosType: PhotoTypes | null = activeTab || (pathname === '/' && 'preview') ||
-        (pathname.includes('portfolio') && 'portfolio') ||
-        (pathname.includes('account') && 'account') || null
+    const params = useParams()
 
-    console.log(pathname)
+    const adminPanelType = pathname.includes('admin') && activeTab
+    const previewType = pathname === '/' && 'preview'
+    const portfolioType = pathname.includes('portfolio') && 'portfolio'
+    const accountType = pathname.includes('account') && 'account'
+    const photoshootID = portfolioType && params.photoshootID
 
+    const photosType: PhotoTypes | false = adminPanelType || previewType || portfolioType || accountType
+    
     if (!photosType) return null
-    return <TypePhotos photosType={photosType} isEdit={isEdit}/>
+    return <TypePhotos photosType={photosType} photoshootID={photoshootID} isEdit={isEdit}/>
 }

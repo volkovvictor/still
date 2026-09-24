@@ -3,7 +3,7 @@ import { StaticImageData } from "next/image";
 export type PhotoTypes = 'preview' | 'portfolio' | 'account'
 export interface IPhoto {
     id: string,
-    _id: string,
+    _id?: string,
     src: string | StaticImageData,
     photoPublicId: string,
     position: number,
@@ -14,7 +14,7 @@ export interface IPhoto {
     isLiked?: boolean,
     isAddedToCart?: boolean,
     isSelled?: boolean,
-    photoshootId?: string,
+    photoshootID?: string,
     userId?: string,
     date?: string,
 }

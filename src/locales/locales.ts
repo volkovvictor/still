@@ -35,6 +35,11 @@ export default function locales() {
         email: "Почта",
         vk: "ВКонтакте",
         save: "Сохранить",
-        editing: "Редактирование"
+        editing: "Редактирование",
+        notSelected: "Не выбрано",
+        new: "Новое",
+        choose: "Выбрать...",
+        date: "Дата",
+        from: "от"
     }
 }

@@ -26,6 +26,7 @@ export function useGetPhotos () {
 
 export function useCreatePhotos () {
 
+    const getPhotos = useGetPhotos()
     const setIsPhotosLoading = usePhotos(state => state.setIsPhotosLoading)
 
     return async (body: FormData) => {
@@ -33,6 +34,26 @@ export function useCreatePhotos () {
         try {
             const path = PHOTOS_URL
             await apiFetch({ path, method: "POST", body })
+            await getPhotos(body.get('type') as PhotoTypes)
+            setIsPhotosLoading(false)
+        } catch(err) {
+            console.log('err', err)
+            setIsPhotosLoading(false)
+        }
+    }
+}
+
+export function useDeletePhotos () {
+    
+    const getPhotos = useGetPhotos()
+    const setIsPhotosLoading = usePhotos(state => state.setIsPhotosLoading)
+
+    return async (photosType: PhotoTypes, id: string) => {
+        setIsPhotosLoading(true)
+        try {
+            const path = `${PHOTOS_URL}/${id}`
+            await apiFetch({ method: 'DELETE', path })
+            await getPhotos(photosType)
             setIsPhotosLoading(false)
         } catch(err) {
             console.log('err', err)

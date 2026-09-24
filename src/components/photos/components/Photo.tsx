@@ -14,6 +14,7 @@ import useAllCheck from '@/store/useAllCheck'
 
 interface Props {
     photo: IPhoto,
+    onDelete: () => void,
     onLike: () => void,
     ref?: (element: Element | null) => void,
     isEdit?: boolean
@@ -21,7 +22,7 @@ interface Props {
 
 const locale = locales()
 
-export default function Photo({photo, onLike, ref, isEdit}: Props) {
+export default function Photo({photo, onLike, onDelete, ref, isEdit}: Props) {
 
     const selectedIds = useAllCheck(state => state.selectedIds)
     const onSelectId = useAllCheck(state => state.onSelectId)
@@ -30,6 +31,8 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
     const isLiked = photo.isLiked && {
         fill: "#FF4757"
     }
+
+    console.log('photo', photo)
 
     const isChecked = !!selectedIds.find(id => id === photo.id)
 
@@ -49,7 +52,6 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
                 )
             }
             <div className={style.photo}>
-                {/* return Image edit */}
                 <Image src={photo.src} alt={photo.photoPublicId} width={photo.width} height={photo.height}/>
                 {
                     pathname === "/account" && (
@@ -60,16 +62,16 @@ export default function Photo({photo, onLike, ref, isEdit}: Props) {
                 }
                 {
                     pathname === "/portfolio" && (
-                        <Link href={"/portfolio/dfads"} className={style.info}>
-                            <div>Имя фамилия</div> {/* photo.userId */}
-                            <div>01.01.2026</div> {/* photo.date */}
+                        <Link href={`/portfolio/${photo.id}`} className={style.info}>
+                            <div>{photo.userId}</div> {/* photo.userId */}
+                            <div>{photo.date}</div> {/* photo.date */}
                         </Link>
                     )
                 }
             </div>
             {
                 (pathname === '/admin' && !isEdit) && ( // add admin role // edit
-                    <div className={`${style.action} ${style.delete}`}>
+                    <div className={`${style.action} ${style.delete}`} onClick={onDelete}>
                         <Icon name="trash" size={20}/>
                     </div>
                 )

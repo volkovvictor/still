@@ -3,24 +3,21 @@
 import { useEffect, useState } from 'react'
 import Icon from '../icon/Icon'
 import style from './select.module.css'
-
-interface Option {
-    name: string,
-    value: string | number
-}
+import { IOption } from '@/types/general.type'
 
 interface Props {
-    options: Option[],
+    options: IOption[],
     label?: string,
+    styles?: React.CSSProperties
     setSelectedOption?: (option: any) => void
 }
 
-export default function Select ({options, label, setSelectedOption}: Props) {
+export default function Select ({options, label, styles = {}, setSelectedOption}: Props) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [selected, setIsSelected] = useState<Option>(options[0])
+    const [selected, setIsSelected] = useState<IOption>(options[0])
     
-    const onSelect = (option: Option) => {
+    const onSelect = (option: IOption) => {
 
         if (option.value !== selected.value) {
             setIsSelected(option)
@@ -33,7 +30,7 @@ export default function Select ({options, label, setSelectedOption}: Props) {
     }
 
     return (
-        <div className={style.select}>
+        <div className={style.select} style={styles}>
             {
                 label && <p className={style.label}>{label}</p>
             }

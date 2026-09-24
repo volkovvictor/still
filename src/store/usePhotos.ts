@@ -8,7 +8,7 @@ interface PhotosState {
     account: IPhoto[],
     isPhotosLoading: boolean,
     setIsPhotosLoading: (val: boolean) => void,
-    setPhotos: (type: PhotoTypes, photos: IPhoto[]) => void,
+    setPhotos: (type: PhotoTypes, photos: IPhoto[]) => void
 }
 
 const usePhotos = create<PhotosState>((set) => ({
