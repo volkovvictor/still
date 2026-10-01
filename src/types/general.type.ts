@@ -10,4 +10,9 @@ export interface IOption {
     required?: boolean
 }
 
+export interface IOrder {
+    id: string
+    position: number
+}
+
 export type ThemeType = "light" | "dark"

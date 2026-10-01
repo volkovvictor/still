@@ -60,6 +60,12 @@ export default function AddModal({closeModal}: Props) {
             closeModal()
         }
     }
+    
+    const photosPosition = useMemo(() => {
+        return photos[selectedCategory].length ? photos[selectedCategory].map(photo => photo.position) : [0]
+    }, [photos, selectedCategory])
+    const lastPosition = useMemo(() => Math.max(...photosPosition), [photosPosition])
+    console.log('lastPosition', lastPosition)
 
     const addPhotoshoot = useCallback(async () => {
 
@@ -85,13 +91,11 @@ export default function AddModal({closeModal}: Props) {
 
         if (!files) return
 
-        const photosLength = photos[selectedCategory].length
-
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData()
 
             formData.append('src', files[i])
-            formData.append('position', String(photosLength + i + 1))
+            formData.append('position', String(lastPosition + i))
             formData.append('type', selectedCategory)
 
             if (selectedCategory === 'portfolio') {
@@ -114,7 +118,6 @@ export default function AddModal({closeModal}: Props) {
 
         if (selectedCategory === 'portfolio') {
             const photoshootID = await addPhotoshoot()
-            console.log('photoshootID', photoshootID)
 
             if (photoshootID) {
                 addPhotos(photoshootID)

@@ -106,7 +106,7 @@ export default function Slider({style={}}: Props) {
                     {
                         data.map(photo =>  {
                             return (
-                                <div className={styles.slide} key={photo.id}>
+                                <div className={styles.slide} key={photo._id}>
                                     <Image src={photo.src} alt={photo.alt}/>
                                 </div>
                             )

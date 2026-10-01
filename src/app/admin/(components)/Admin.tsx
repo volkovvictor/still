@@ -14,6 +14,7 @@ import type { IPhoto, PhotoTypes } from "@/types/photos.type";
 import Button from '@/ui/button/Button';
 import useAllCheck from '@/store/useAllCheck';
 import usePhotos from '@/store/usePhotos';
+import { useUpdatePhotosOrder } from '@/components/photos/hooks/usePhotosApi';
 
 const locale = locales()
 
@@ -41,6 +42,11 @@ export default function Admin() {
 
     const photos = usePhotos()
 
+    const cleanNewOrder = usePhotos(state => state.cleanNewOrder)
+    const newOrder = usePhotos(state => state.newOrder)
+
+    const updatePhotosOrder = useUpdatePhotosOrder()
+
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
     const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
     const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false)
@@ -48,7 +54,7 @@ export default function Admin() {
 
     const { isSelectAllChecked, selectedIds, toggleAllCheck, clearAll } = useAllCheck()
 
-    const photosIds = useMemo(() => photos[activeTab].map(photo => photo.id), [activeTab, photos])
+    const photosIds = useMemo(() => photos[activeTab].map(photo => photo._id), [activeTab, photos])
 
     const onChange = useCallback((val: boolean) => {
         toggleAllCheck(photosIds, val)
@@ -72,6 +78,17 @@ export default function Admin() {
             toggleAllCheck(photosIds, true)
         }
     }, [photosIds, toggleAllCheck, selectedIds])
+
+    const onCloseEditing = useCallback(() => {
+        cleanNewOrder()
+        setIsEdit(false)
+    }, [cleanNewOrder])
+
+    const onReorder = useCallback(() => {
+        console.log('newOrder', newOrder)
+        updatePhotosOrder('preview', newOrder)
+        onCloseEditing()
+    }, [newOrder, onCloseEditing, updatePhotosOrder])
 
     return (
         <>
@@ -101,9 +118,9 @@ export default function Admin() {
                 {
                     isEdit && (
                         <div className={style.editBlock}>
-                            <Button buttonSize='small'>{locale.save}</Button>
+                            <Button buttonSize='small' onClick={onReorder}>{locale.save}</Button>
                             <p>{locale.editing}</p>
-                            <Button onClick={() => setIsEdit(false)} buttonSize='small'>{locale.cancel}</Button>
+                            <Button onClick={onCloseEditing} buttonSize='small'>{locale.cancel}</Button>
                         </div>
                     )
                 }

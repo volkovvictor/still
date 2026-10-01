@@ -1,9 +1,10 @@
 import { IPhoto } from "@/types/photos.type";
 import Photo from "./Photo";
 import { useSortable } from "@dnd-kit/react/sortable";
+import { IPhotoshoot } from "@/types/photoshoots.type";
 
 interface Props {
-    photo: IPhoto,
+    photo: IPhoto | IPhotoshoot,
     onDelete: (id: string) => void,
     onLike: (id: string) => void,
     index: number,
@@ -13,14 +14,14 @@ interface Props {
 export default function SortablePhoto({photo, onLike, onDelete, index, isEdit=true}: Props) {
 
     const { ref } = useSortable({
-        id: photo.id,
+        id: photo._id,
         index
     })
 
     return <Photo 
             ref={ref}
             photo={photo}
-            onDelete={() => onDelete(photo.id)}
-            onLike={() => onLike(photo.id)}
+            onDelete={() => onDelete(photo._id)}
+            onLike={() => onLike(photo._id)}
             isEdit={isEdit} />
 }

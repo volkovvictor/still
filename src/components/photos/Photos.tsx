@@ -3,6 +3,8 @@
 import type { PhotoTypes } from '@/types/photos.type'
 import { usePathname, useParams } from 'next/navigation'
 import TypePhotos from './components/TypePhotos'
+import { useEffect } from 'react'
+import useSelectedType from '@/store/useSelectedType'
 
 interface Props {
     isEdit?: boolean,

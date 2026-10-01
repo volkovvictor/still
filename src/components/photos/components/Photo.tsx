@@ -11,9 +11,10 @@ import locales from '@/locales/locales'
 import Checkbox from '@/ui/checkbox/Checkbox'
 import { useCallback, useEffect, useMemo } from 'react'
 import useAllCheck from '@/store/useAllCheck'
+import { IPhotoshoot } from '@/types/photoshoots.type'
 
 interface Props {
-    photo: IPhoto,
+    photo: IPhoto | IPhotoshoot,
     onDelete: () => void,
     onLike: () => void,
     ref?: (element: Element | null) => void,
@@ -32,12 +33,10 @@ export default function Photo({photo, onLike, onDelete, ref, isEdit}: Props) {
         fill: "#FF4757"
     }
 
-    console.log('photo', photo)
-
-    const isChecked = !!selectedIds.find(id => id === photo.id)
+    const isChecked = !!selectedIds.find(id => id === photo._id)
 
     const onChange = useCallback((val: boolean) => {
-        onSelectId(photo.id, val)
+        onSelectId(photo._id, val)
     }, [onSelectId, photo])
 
     return (
@@ -62,7 +61,7 @@ export default function Photo({photo, onLike, onDelete, ref, isEdit}: Props) {
                 }
                 {
                     pathname === "/portfolio" && (
-                        <Link href={`/portfolio/${photo.id}`} className={style.info}>
+                        <Link href={`/portfolio/${photo._id}`} className={style.info}>
                             <div>{photo.userId}</div> {/* photo.userId */}
                             <div>{photo.date}</div> {/* photo.date */}
                         </Link>
