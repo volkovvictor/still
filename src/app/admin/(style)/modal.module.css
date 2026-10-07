@@ -40,10 +40,15 @@
 .addPreview {
     display: flex;
     justify-content: center;
+}
+
+.previewPlaceholder {
+    display: flex;
     align-items: center;
+    justify-content: center;
     width: 200px;
     height: 200px;
-    background-color: black;
+    background-color: var(--accent-color)
 }
 
 .addFile input,

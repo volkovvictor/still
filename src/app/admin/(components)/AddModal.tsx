@@ -18,6 +18,7 @@ import usePhotoshoots from '@/store/usePhotoshoots'
 import { IPhotoshoot } from '@/types/photoshoots.type'
 import useUsers from '@/store/useUsers'
 import Input from '@/ui/input/Input'
+import Image from 'next/image'
 
 interface Props {
     closeModal: () => void
@@ -93,6 +94,10 @@ export default function AddModal({closeModal}: Props) {
             url: URL.createObjectURL(file)
         }
     )), [files])
+
+    const portfolioPreview: string | null = useMemo(() => {
+        return photoshootPreview ? URL.createObjectURL(photoshootPreview) : null
+    }, [photoshootPreview])
 
     const onRemovePhotoPreview = useCallback((preview: IPhotoPreview) => {
         const removedFile = files.find(file => `${file.lastModified}_${file.name}` === preview.id)
@@ -196,9 +201,17 @@ export default function AddModal({closeModal}: Props) {
                             {
                                 selectedCategory === "portfolio" && <label className={style.addPreview}>
                                     <input type="file" name="preview" onChange={(e) => setPhotoshootPreview(e.target.files?.[0] || null)}/>
-                                    <div className={style.addButton}>
-                                        <Icon name="add" size={50}/>
-                                    </div>
+                                    {
+                                        portfolioPreview
+                                        ? <Image src={portfolioPreview} alt="preview" width={200} height={200}/>
+                                        : (
+                                            <div className={style.previewPlaceholder}>
+                                                <div className={style.addButton}>
+                                                    <Icon name="add" size={50}/>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                             </label>
                             }
                             <label className={style.addFile}>
@@ -209,7 +222,7 @@ export default function AddModal({closeModal}: Props) {
                             </label>
                             <Slider previews={photosPreviews} onRemove={onRemovePhotoPreview}/>
                             <div className={style.buttons}>
-                                <Button onClick={() => {}}>{locale.add}</Button>
+                                <Button>{locale.add}</Button>
                                 <Button onClick={closeModal}>{locale.cancel}</Button>
                             </div>
                     </form>
