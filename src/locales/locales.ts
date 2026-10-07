@@ -12,6 +12,7 @@ export default function locales() {
         liked: "Понравилось",
         purchased: "Куплено",
         chooseAll: "Выбрать все",
+        removeSelected: "Удалить выбранное",
         addPhotos: "Добавить фотографии",
         add: "Добавить",
         cancel: "Отменить",

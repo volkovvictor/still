@@ -15,4 +15,9 @@ export interface IOrder {
     position: number
 }
 
+export interface IPhotoPreview {
+    id: string,
+    url: string
+}
+
 export type ThemeType = "light" | "dark"

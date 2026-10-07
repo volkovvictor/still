@@ -48,11 +48,14 @@ export function useDeletePhotos () {
     const getPhotos = useGetPhotos()
     const setIsPhotosLoading = usePhotos(state => state.setIsPhotosLoading)
 
-    return async (photosType: PhotoTypes, id: string) => {
+    return async (photosType: PhotoTypes, ids: string[]) => {
         setIsPhotosLoading(true)
         try {
-            const path = `${PHOTOS_URL}/${id}`
-            await apiFetch({ method: 'DELETE', path })
+
+            ids.forEach(async (id) => {
+                const path = `${PHOTOS_URL}/${id}`
+                await apiFetch({ method: 'DELETE', path })
+            })
             await getPhotos(photosType)
             setIsPhotosLoading(false)
         } catch(err) {

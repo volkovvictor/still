@@ -14,7 +14,7 @@ import type { IPhoto, PhotoTypes } from "@/types/photos.type";
 import Button from '@/ui/button/Button';
 import useAllCheck from '@/store/useAllCheck';
 import usePhotos from '@/store/usePhotos';
-import { useUpdatePhotosOrder } from '@/components/photos/hooks/usePhotosApi';
+import { useDeletePhotos, useUpdatePhotosOrder } from '@/components/photos/hooks/usePhotosApi';
 
 const locale = locales()
 
@@ -44,8 +44,10 @@ export default function Admin() {
 
     const cleanNewOrder = usePhotos(state => state.cleanNewOrder)
     const newOrder = usePhotos(state => state.newOrder)
+    const isPhotosLoading = usePhotos(state => state.isPhotosLoading)
 
     const updatePhotosOrder = useUpdatePhotosOrder()
+    const deletePhotos = useDeletePhotos()
 
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
     const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
@@ -90,18 +92,32 @@ export default function Admin() {
         onCloseEditing()
     }, [newOrder, onCloseEditing, updatePhotosOrder])
 
+    const onDeleteMany = useCallback(() => {
+        deletePhotos('preview', selectedIds)
+    }, [selectedIds, deletePhotos])
+
     return (
         <>
             <div className={style.admin}>
                 <Tabs tabs={tabs} setTabs={setTabs} onChangeTab={(val) => onChangeTab(val as PhotoTypes)}/>
-                <div className={style.actions}>
-                    {
+                <div className={style.topPanel}>
+                    <div className={style.actions}>
+                        {
                         photosIds.length > 0 && <Checkbox 
                                                     text={locale.chooseAll} 
                                                     textWeight={700} 
                                                     isChecked={isSelectAllChecked} 
                                                     onChange={onChange}/>
-                    }
+                        }
+                        {
+                           selectedIds.length > 0 && (
+                            <button className={style.allRemoveButton} onClick={onDeleteMany}>
+                                <Icon size={30} name="trash"/>
+                                <span>{locale.removeSelected}</span>
+                            </button>
+                           ) 
+                        }
+                    </div>
                     <div className={style.tools}>
                         <div className={style.tool} onClick={() => setIsModalOpen(true)}>
                             <Icon name="add" size={35} stroke={MAIN_COLOR}/>

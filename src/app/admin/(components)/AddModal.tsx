@@ -11,7 +11,7 @@ import { ReactElement, ReactEventHandler, use, useCallback, useEffect, useMemo, 
 import { PhotoTypes } from '@/types/photos.type'
 import usePhotos from '@/store/usePhotos'
 import { useCreatePhotos, useDeletePhotos, useGetPhotos } from '@/components/photos/hooks/usePhotosApi'
-import { IOption } from '@/types/general.type'
+import { IOption, IPhotoPreview } from '@/types/general.type'
 import getOptions from '@/utils/addPhotosOptions'
 import { useCreatePhotoshoots, useGetPhotoshoots } from '@/components/photos/hooks/usePhotoshootApi'
 import usePhotoshoots from '@/store/usePhotoshoots'
@@ -32,7 +32,7 @@ const { categories, portfolioTypes } = getOptions()
 
 export default function AddModal({closeModal}: Props) {
 
-    const [files, setFiles] = useState<FileList | null>(null)
+    const [files, setFiles] = useState<File[]>([])
     const [photoshootPreview, setPhotoshootPreview] = useState<File | null>(null)
     const [selectedCategory, setSelectedCategory] = useState<PhotoTypes>('preview')
     const [selectedPortfolioType, setSelectedPortfolioType] = useState<PortfolioType>('new')
@@ -87,9 +87,37 @@ export default function AddModal({closeModal}: Props) {
         return photoshoot
     }, [files, photoshootPreview, createPhotoshoots, getPhotoshoots, date, photoshoots.length])
 
+    const photosPreviews: IPhotoPreview[] = useMemo(() => files.map(file => (
+        {
+            id: `${file.lastModified}_${file.name}`,
+            url: URL.createObjectURL(file)
+        }
+    )), [files])
+
+    const onRemovePhotoPreview = useCallback((preview: IPhotoPreview) => {
+        const removedFile = files.find(file => `${file.lastModified}_${file.name}` === preview.id)
+        
+        if (!removedFile) return
+
+        URL.revokeObjectURL(preview.url)
+
+        const newFiles = files.filter(file => `${file.lastModified}_${file.name}` !== preview.id)
+
+        setFiles(newFiles)
+    }, [files])
+    
+
+    useEffect(() => {
+        return () => {
+            photosPreviews.forEach(preview => {
+                URL.revokeObjectURL(preview.url)
+            })
+        }
+    }, [photosPreviews])
+
     const addPhotos = useCallback((photoshootID: string | null = null) => {
 
-        if (!files) return
+        if (files.length === 0) return
 
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData()
@@ -111,7 +139,7 @@ export default function AddModal({closeModal}: Props) {
 
             createPhotos(formData)
         }
-    }, [files, photos, selectedCategory, createPhotos, selectedUserID])
+    }, [files, selectedCategory, createPhotos, selectedUserID, lastPosition])
 
     const onSubmit = useCallback(async (e: React.SubmitEvent) => {
         e.preventDefault()
@@ -128,6 +156,20 @@ export default function AddModal({closeModal}: Props) {
 
         closeModal()
     }, [selectedCategory, addPhotos, addPhotoshoot, closeModal])
+
+    const onSelectPhotos = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newFiles = e.target?.files
+
+        if (!newFiles) return
+
+        const filesArray: File[] = []
+
+        for (const file of newFiles) {
+            filesArray.push(file)
+        }
+
+        setFiles(filesArray)
+    }
 
     return (
         <div className={style.modal} onClick={outsideModalClose}>
@@ -160,12 +202,12 @@ export default function AddModal({closeModal}: Props) {
                             </label>
                             }
                             <label className={style.addFile}>
-                                <input type="file" name="photo" multiple onChange={(e) => setFiles(e.target.files)}/>
+                                <input type="file" name="photo" multiple onChange={onSelectPhotos}/>
                                 <div className={style.addButton}>
                                     <Icon name="add" size={50}/>
                                 </div>
                             </label>
-                            <Slider/>
+                            <Slider previews={photosPreviews} onRemove={onRemovePhotoPreview}/>
                             <div className={style.buttons}>
                                 <Button onClick={() => {}}>{locale.add}</Button>
                                 <Button onClick={closeModal}>{locale.cancel}</Button>

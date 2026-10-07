@@ -14,7 +14,8 @@
 }
 
 .slide {
-    flex: 0 0 20%;
+    position: relative;
+    flex: 1 0 20%;
     max-height: 150px;
     padding: 5px;
 }
@@ -24,6 +25,25 @@
    height: 100%;
    object-fit: contain;
    border: 1px solid var(--accent-color);
+}
+
+.remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--opacity-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color .2s linear;
+}
+
+.remove:hover {
+    background-color: var(--accent-hover);
 }
 
 /* .slide:not(.slide:first-child) img {
