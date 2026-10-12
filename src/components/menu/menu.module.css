@@ -24,7 +24,7 @@
 .menu ul {
     display: flex;
     flex-direction: column;
-    padding-top: 50px;
+    padding: 50px;
 }
 
 .link {
@@ -32,15 +32,4 @@
     display: flex;
     align-items: center;
     height: 60px;
-}
-
-.icon {
-    width: 60px;
-    height: 60px;
-    border: 4px solid var(--main-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
 }

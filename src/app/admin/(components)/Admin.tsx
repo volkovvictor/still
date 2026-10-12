@@ -29,11 +29,6 @@ const defTabs: ITabs[] = [
         value: locale.portfolio,
         isActive: false
     },
-    {
-        name: "account",
-        value: locale.account,
-        isActive: false
-    },
 ]
 
 export default function Admin() {
@@ -135,7 +130,6 @@ export default function Admin() {
                     isEdit && (
                         <div className={style.editBlock}>
                             <Button buttonSize='small' onClick={onReorder}>{locale.save}</Button>
-                            <p>{locale.editing}</p>
                             <Button onClick={onCloseEditing} buttonSize='small'>{locale.cancel}</Button>
                         </div>
                     )

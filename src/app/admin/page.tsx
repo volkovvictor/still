@@ -7,7 +7,6 @@ const locale = locales()
 export default function AdminPage() {
   return (
     <div>
-        <Title title={locale.admin}/>
         <Admin/>
     </div>
   );

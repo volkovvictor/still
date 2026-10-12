@@ -13,10 +13,6 @@ export default function getOptions () {
             name: locale.portfolio,
             value: "portfolio"
         },
-        {
-            name: locale.account,
-            value: "account",
-        },
     ]
     
     const portfolioTypes: IOption[] = [

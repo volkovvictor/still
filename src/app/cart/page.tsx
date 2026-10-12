@@ -12,7 +12,6 @@ const locale = locales()
 export default async function Cart() {
     return (
         <div className={style.cart}>
-            <Title title={locale.cart}/>
             <Slider style={{ margin: "50px 0" }}/>
             <div className={style.cartFooter}>
                 <p className={style.price}><span>4000</span> рублей</p>

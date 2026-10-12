@@ -28,7 +28,6 @@ const links: LinkI[] = [
         url: '/account',
         name: local.account,
         access: 'user',
-        iconName: 'user'
     },
     {
         url: '/portfolio',
@@ -50,7 +49,7 @@ export default function Menu({setMenuOpen, isMenuOpen}: Props) {
         if (isMenuOpen) {
             setMenuOpen(false)
         }
-    }, [pathname])
+    }, [])
 
     return (
         <div className={`${style.menu}${isMenuOpen ? ` ${style.isOpen}` : ''}`}>

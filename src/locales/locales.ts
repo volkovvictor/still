@@ -1,4 +1,4 @@
-export default function locales() {
+export default function locales(): Record<string, string> {
     return {
         main: "Главная",
         account: "Профиль",
@@ -36,7 +36,6 @@ export default function locales() {
         email: "Почта",
         vk: "ВКонтакте",
         save: "Сохранить",
-        editing: "Редактирование",
         notSelected: "Не выбрано",
         new: "Новое",
         choose: "Выбрать...",

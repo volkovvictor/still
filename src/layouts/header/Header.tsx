@@ -6,6 +6,8 @@ import BurgerMenu from '@/ui/burgerMenu/BurgerMenu'
 import Cart from '@/ui/cart/Cart'
 import Menu from '@/components/menu/Menu'
 import { useCallback, useState } from 'react'
+import Title from '@/ui/title/Title'
+import useTitle from '@/hooks/useTitle'
 
 export default function Header () {
     
@@ -15,10 +17,15 @@ export default function Header () {
         setMenuOpen(state => !state)
     }, [setMenuOpen])
 
+    const title = useTitle()
+
     return (
         <>
             <div className={`${style.header} container`}>
-                <Logo/>
+                <div>
+                    <Logo/>
+                    { title && <Title title={title}/>}
+                </div>
                 <div className={style.header_right}>
                     <Cart/>
                     <BurgerMenu onMenuToggle={onMenuToggle}/>

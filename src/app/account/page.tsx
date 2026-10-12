@@ -9,7 +9,6 @@ const locale = locales()
 export default function Account() {
     return (
         <div>
-            <Title title={locale.account}/>
             <AccountInfo/>
             <UserPhotos/>
         </div>

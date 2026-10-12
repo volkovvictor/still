@@ -91,14 +91,16 @@ export default function UserPhotos() {
     return (
         <div>
             <Title tag='h2' title={locale.myPhotos} size="3rem"/>
-            <Tabs tabs={tabs} setTabs={setTabs} setActiveTab={setActiveTab}/>
-            <div style={{paddingTop: 50}}>
-                {
-                    activePhotos.length ?
-                    <Photos photos={activePhotos}/>
-                    :
-                    <Empty text={locale.noPhotos}/>
-                }
+            <div style={{ marginTop: 50 }}>
+                <Tabs tabs={tabs} setTabs={setTabs} onChangeTab={setActiveTab}/>
+                <div style={{paddingTop: 50}}>
+                    {
+                        activePhotos.length ?
+                        <Photos/>
+                        :
+                        <Empty text={locale.noPhotos}/>
+                    }
+                </div>
             </div>
         </div>
     )
