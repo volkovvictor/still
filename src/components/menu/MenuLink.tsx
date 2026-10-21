@@ -5,20 +5,22 @@ import style from './menu.module.css'
 import Link from 'next/link'
 import Icon from '@/ui/icon/Icon'
 import useColors from '@/hooks/useColors'
+import { Fragment } from 'react'
 
 interface Props {
-    link: LinkI
+    link: LinkI,
+    isList?: boolean
 }
 
-export default function MenuLink({ link }: Props) {
+export default function MenuLink({ link, isList=true}: Props) {
 
-    const { MAIN_COLOR } = useColors()
-    
+    const Component = isList ? 'li' : Fragment
+
     return (
-        <li>
+        <Component>
             <Link className={style.link} href={link.url}>
                 <span>{link.name}</span>
             </Link>
-        </li>
+        </Component>
     )
 }

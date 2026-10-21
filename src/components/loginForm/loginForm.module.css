@@ -1,0 +1,38 @@
+.form {
+    width: 33.333%;
+    margin: 0 auto;
+}
+.formInputes {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.formLink {
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: var(--text-sm);
+    transition: color .1s linear;
+}
+
+.formLink:hover {
+    color: var(--opacity-bg-color)
+}
+
+.privatCheck {
+    margin-top: 30px;
+    position: relative;
+    width: fit-content;
+}
+
+.formFooter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin: 50px 0 0 0;
+}
+
+.formFooter > p {
+    font-size: var(--text-sm);
+}

@@ -28,6 +28,7 @@ export default function locales(): Record<string, string> {
         registration: "Регистрация",
         fullname: "ФИО",
         isPrivatAccount: "Приватный аккаунт",
+        privatAccountText: "При включении приватного аккаунта, ваше имя и фото будут скрыты для остальных пользователей\nМожно изменить в любой момент в настройках",
         toCart: "В корзину",
         order: "Заказать",
         noPhotos: "Нет фотографий",

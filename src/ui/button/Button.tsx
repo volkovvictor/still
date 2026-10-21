@@ -7,7 +7,8 @@ interface Props {
     children: string | React.ReactElement,
     buttonSize?: Size,
     bordered?: boolean,
-    onClick?: () => void
+    onClick?: () => void,
+    addStyles?: React.CSSProperties
 }
 
 interface ButtonStyle {
@@ -20,12 +21,12 @@ const size: Record<Size, string> = {
     small: BUTTON_SMALL
 }
 
-export default function Button({children, buttonSize='base', bordered=true, onClick}: Props) {
+export default function Button({children, addStyles, buttonSize='base', bordered=true, onClick}: Props) {
     const styles: ButtonStyle = {height: size[buttonSize]}
     
     if (bordered) {
         styles.borderRadius = '10px'
     }
 
-    return <button className={style.button} style={styles} onClick={onClick}>{children}</button>
+    return <button className={style.button} style={{...styles, ...addStyles}} onClick={onClick}>{children}</button>
 }

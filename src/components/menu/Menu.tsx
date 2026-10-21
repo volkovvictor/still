@@ -38,8 +38,14 @@ const links: LinkI[] = [
         url: '/contacts',
         name: local.contacts,
         access: 'all'
-    },
+    }
 ]
+
+const loginOrLogoutLink: LinkI = {
+    url: '/login',
+    name: local.login,
+    access: 'all'
+}
 
 export default function Menu({setMenuOpen, isMenuOpen}: Props) {
 
@@ -62,6 +68,7 @@ export default function Menu({setMenuOpen, isMenuOpen}: Props) {
                     links.map((link) => <MenuLink key={link.url} link={link}/>)
                 }
             </ul>
+            <MenuLink link={loginOrLogoutLink} isList={false}/>
         </div>
     )
 }

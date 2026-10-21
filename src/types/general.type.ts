@@ -21,3 +21,4 @@ export interface IPhotoPreview {
 }
 
 export type ThemeType = "light" | "dark"
+export type InputType = "text" | "password" | "number" | "date"

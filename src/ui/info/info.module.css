@@ -1,0 +1,33 @@
+.info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: var(--text-sm);
+    color: var(--main-color);
+}
+.infoButton {
+    position: absolute;
+    top: 0;
+    right: -23px;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.infoBody {
+    position: absolute;
+    top: 0;
+    right: -20px;
+    transform: translate(100%, -100%);
+    background-color: var(--accent-color);
+    padding: 30px;
+    border-radius: 10px 10px 10px 0;
+    white-space: pre-line;
+    min-width: 300px;
+    line-height: 1.2;
+}

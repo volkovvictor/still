@@ -6,8 +6,29 @@
     padding-top: 10px;
 }
 
+.header_left {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 50;
+}
+
 .header_right {
     display: flex;
     align-items: center;
     gap: 50;
+}
+
+.back {
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.back svg {
+    transition: all .1s linear;
+}
+
+.back:hover svg {
+    transform: scale(1.1);
+    stroke: var(--accent-hover)
 }

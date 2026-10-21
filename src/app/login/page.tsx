@@ -1,12 +1,7 @@
-import Input from "@/ui/input/Input";
-import locales from "@/locales/locales";
-
-const locale = locales()
+import LoginForm from "@/components/loginForm/LoginForm"
 
 export default function Login() {
     return (
-        <div>
-            <Input label={locale.emailOrPhone} name="login"/>
-        </div>
+        <LoginForm/>
     )
 }
