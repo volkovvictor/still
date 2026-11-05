@@ -15,6 +15,9 @@ import Button from '@/ui/button/Button';
 import useAllCheck from '@/store/useAllCheck';
 import usePhotos from '@/store/usePhotos';
 import { useDeletePhotos, useUpdatePhotosOrder } from '@/components/photos/hooks/usePhotosApi';
+import useUsers from '@/store/useUsers';
+import { useRouter } from 'next/navigation';
+import Loader from '@/ui/loader/Loader';
 
 const locale = locales()
 
@@ -35,7 +38,12 @@ export default function Admin() {
 
     const { MAIN_COLOR } = useColors()
 
+    const router = useRouter()
+
     const photos = usePhotos()
+
+    const user = useUsers(state => state.currentUser)
+    const isCurrentUserLoading = useUsers(state => state.isCurrentUserLoading)
 
     const cleanNewOrder = usePhotos(state => state.cleanNewOrder)
     const newOrder = usePhotos(state => state.newOrder)
@@ -62,6 +70,14 @@ export default function Admin() {
     }, [])
 
     useEffect(() => {
+        console.log('user?.role', user?.role)
+        // if (user?.role !== "admin" && !isCurrentUserLoading) {
+        //     router.push("/")
+        // }
+        console.log('isCurrentUserLoading', isCurrentUserLoading)
+    }, [user, isCurrentUserLoading])
+
+    useEffect(() => {
         if (isEdit) {
             clearAll()
         }
@@ -82,7 +98,6 @@ export default function Admin() {
     }, [cleanNewOrder])
 
     const onReorder = useCallback(() => {
-        console.log('newOrder', newOrder)
         updatePhotosOrder('preview', newOrder)
         onCloseEditing()
     }, [newOrder, onCloseEditing, updatePhotosOrder])
@@ -92,53 +107,63 @@ export default function Admin() {
     }, [selectedIds, deletePhotos])
 
     return (
-        <>
-            <div className={style.admin}>
-                <Tabs tabs={tabs} setTabs={setTabs} onChangeTab={(val) => onChangeTab(val as PhotoTypes)}/>
-                <div className={style.topPanel}>
-                    <div className={style.actions}>
-                        {
-                        photosIds.length > 0 && <Checkbox 
-                                                    text={locale.chooseAll} 
-                                                    textWeight={700} 
-                                                    isChecked={isSelectAllChecked} 
-                                                    onChange={onChange}/>
-                        }
-                        {
-                           selectedIds.length > 0 && (
-                            <button className={style.allRemoveButton} onClick={onDeleteMany}>
-                                <Icon size={30} name="trash"/>
-                                <span>{locale.removeSelected}</span>
-                            </button>
-                           ) 
-                        }
-                    </div>
-                    <div className={style.tools}>
-                        <div className={style.tool} onClick={() => setIsModalOpen(true)}>
-                            <Icon name="add" size={35} stroke={MAIN_COLOR}/>
-                        </div>
-                        {
-                            photosIds.length > 0 && (
-                                <div className={`${style.tool}${isEdit ? " " + style.active : ""}`} onClick={() => setIsEdit(!isEdit)}>
-                                    <Icon name="edit" size={35} stroke={MAIN_COLOR}/>
-                                </div>
-                        )
-                        }
-                    </div>
-                </div>
-                {
-                    isEdit && (
-                        <div className={style.editBlock}>
-                            <Button buttonSize='small' onClick={onReorder}>{locale.save}</Button>
-                            <Button onClick={onCloseEditing} buttonSize='small'>{locale.cancel}</Button>
-                        </div>
-                    )
-                }
-                <Photos isEdit={isEdit} activeTab={activeTab}/>
-            </div>
+        <div style={{ position: "relative" }}>
             {
-                isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>
+                isCurrentUserLoading
+                ? <Loader/>
+                : !user && !isCurrentUserLoading
+                    ? <div style={{ textAlign: "center" }}>Нет доступа</div>
+                    : (
+                        <>
+                            <div className={style.admin}>
+                                <Tabs tabs={tabs} setTabs={setTabs} onChangeTab={(val) => onChangeTab(val as PhotoTypes)}/>
+                                <div className={style.topPanel}>
+                                    <div className={style.actions}>
+                                        {
+                                        photosIds.length > 0 && <Checkbox 
+                                                                    text={locale.chooseAll} 
+                                                                    textWeight={700} 
+                                                                    isChecked={isSelectAllChecked} 
+                                                                    onChange={onChange}/>
+                                        }
+                                        {
+                                        selectedIds.length > 0 && (
+                                            <button className={style.allRemoveButton} onClick={onDeleteMany}>
+                                                <Icon size={30} name="trash"/>
+                                                <span>{locale.removeSelected}</span>
+                                            </button>
+                                        ) 
+                                        }
+                                    </div>
+                                    <div className={style.tools}>
+                                        <div className={style.tool} onClick={() => setIsModalOpen(true)}>
+                                            <Icon name="add" size={35} stroke={MAIN_COLOR}/>
+                                        </div>
+                                        {
+                                            photosIds.length > 0 && (
+                                                <div className={`${style.tool}${isEdit ? " " + style.active : ""}`} onClick={() => setIsEdit(!isEdit)}>
+                                                    <Icon name="edit" size={35} stroke={MAIN_COLOR}/>
+                                                </div>
+                                        )
+                                        }
+                                    </div>
+                                </div>
+                                {
+                                    isEdit && (
+                                        <div className={style.editBlock}>
+                                            <Button buttonSize='small' onClick={onReorder}>{locale.save}</Button>
+                                            <Button onClick={onCloseEditing} buttonSize='small'>{locale.cancel}</Button>
+                                        </div>
+                                    )
+                                }
+                                <Photos isEdit={isEdit} activeTab={activeTab}/>
+                            </div>
+                            {
+                                isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>
+                            }
+                        </>
+                    )
             }
-        </>
+        </div>
     )
 }

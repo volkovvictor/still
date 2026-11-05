@@ -27,8 +27,6 @@ export default function Header () {
 
     const title = useTitle()
 
-    console.log('router', router)
-
     return (
         <>
             <div className={`${style.header} container`}>

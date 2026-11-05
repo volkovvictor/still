@@ -66,7 +66,6 @@ export default function AddModal({closeModal}: Props) {
         return photos[selectedCategory].length ? photos[selectedCategory].map(photo => photo.position) : [0]
     }, [photos, selectedCategory])
     const lastPosition = useMemo(() => Math.max(...photosPosition), [photosPosition])
-    console.log('lastPosition', lastPosition)
 
     const addPhotoshoot = useCallback(async () => {
 

@@ -5,6 +5,7 @@ import setUiVariables from "@/utils/setUiVariables";
 import { ThemeProvider } from "next-themes";
 import Header from "@/layouts/header/Header";
 import Footer from "@/layouts/footer/Footer";
+import AuthInit from "@/components/authInit/AuthInit";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -32,6 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" style={variables} className={`${roboto.variable} ${imFellFrenchCanon.variable}`} suppressHydrationWarning>
+      <AuthInit/>
       <body>
         <ThemeProvider themes={["dark", "light"]}>
             <Header/>

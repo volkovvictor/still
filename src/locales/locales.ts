@@ -25,6 +25,7 @@ export default function locales(): Record<string, string> {
         getRegistration: "Зарегестрироваться",
         getLogin: "Войти",
         login: "Вход",
+        logout: "Выход",
         registration: "Регистрация",
         fullname: "ФИО",
         isPrivatAccount: "Приватный аккаунт",

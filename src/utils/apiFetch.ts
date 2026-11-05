@@ -5,10 +5,10 @@ interface Params extends RequestInit {
     isFormData?: boolean
 }
 
-export default async function apiFetch ({path, method='GET', body, headers, isFormData=false}: Params) {
+export default async function apiFetch ({path, method='GET', body, headers, isFormData=false, ...params}: Params) {
     try {
-        console.log('body', body)
-        const res = await fetch(path, { method, body, headers: isFormData ? headers : { 'Content-Type': 'application/json', ...headers }, })
+        const res = await fetch(path, { method, body, headers: isFormData || !body ? headers : { 'Content-Type': 'application/json', ...headers }, ...params })
+
         const data = await res.json()
 
         return data

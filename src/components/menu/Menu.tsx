@@ -7,13 +7,17 @@ import MenuLink from './MenuLink'
 import CloseButton from '@/ui/closeButton/CloseButton'
 import SwitchTheme from '@/ui/switchTheme/SwitchTheme'
 import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import useToken from '@/store/useToken'
+import useMenuLinks from './hooks/useMenuLinks'
+import LogoutLink from './LogoutLink'
+import useUsers from '@/store/useUsers'
 
 export interface LinkI {
     url: string,
     name: string,
-    access: 'all' | 'admin' | 'user',
-    iconName?: IconNames
+    iconName?: IconNames,
+    actionOnLink?: () => void
 }
 
 interface Props {
@@ -23,33 +27,11 @@ interface Props {
 
 const local = locales()
 
-const links: LinkI[] = [
-    {
-        url: '/account',
-        name: local.account,
-        access: 'user',
-    },
-    {
-        url: '/portfolio',
-        name: local.portfolio,
-        access: 'all'
-    },
-    {
-        url: '/contacts',
-        name: local.contacts,
-        access: 'all'
-    }
-]
-
-const loginOrLogoutLink: LinkI = {
-    url: '/login',
-    name: local.login,
-    access: 'all'
-}
-
 export default function Menu({setMenuOpen, isMenuOpen}: Props) {
 
     const pathname = usePathname()
+    const user = useUsers(state => state.currentUser)
+    const { pagesLinks, loginLink} = useMenuLinks(user)
 
     useEffect(() => {
         if (isMenuOpen) {
@@ -65,10 +47,14 @@ export default function Menu({setMenuOpen, isMenuOpen}: Props) {
             </div>
             <ul>
                 {
-                    links.map((link) => <MenuLink key={link.url} link={link}/>)
+                    pagesLinks.map((link) => <MenuLink key={link.url} link={link}/>)
                 }
             </ul>
-            <MenuLink link={loginOrLogoutLink} isList={false}/>
+            {
+                !user
+                    ? <MenuLink link={loginLink} isList={false}/>
+                    : <LogoutLink/>
+            }
         </div>
     )
 }
