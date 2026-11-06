@@ -19,10 +19,6 @@ export default function Header () {
     
     const [isMenuOpen, setMenuOpen] = useState<boolean>(false)
 
-    const onMenuToggle = useCallback(() => {
-        setMenuOpen(state => !state)
-    }, [setMenuOpen])
-
     const isLoginPage = pathname === '/login'
 
     const title = useTitle()
@@ -45,7 +41,7 @@ export default function Header () {
                     !isLoginPage && ( // edit to isLogined
                         <div className={style.header_right}>
                             <Cart/>
-                            <BurgerMenu onMenuToggle={onMenuToggle}/>
+                            <BurgerMenu onMenuOpen={() => setMenuOpen(true)}/>
                         </div>
                     )
                 }

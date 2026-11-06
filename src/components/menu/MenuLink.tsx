@@ -9,16 +9,17 @@ import { Fragment } from 'react'
 
 interface Props {
     link: LinkI,
-    isList?: boolean
+    onClick: () => void
+    isList?: boolean,
 }
 
-export default function MenuLink({ link, isList=true}: Props) {
+export default function MenuLink({ link, onClick, isList=true}: Props) {
 
     const Component = isList ? 'li' : Fragment
 
     return (
         <Component>
-            <Link className={style.link} href={link.url}>
+            <Link onClick={onClick} className={style.link} href={link.url}>
                 <span>{link.name}</span>
             </Link>
         </Component>

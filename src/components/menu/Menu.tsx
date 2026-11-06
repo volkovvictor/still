@@ -28,32 +28,26 @@ interface Props {
 const local = locales()
 
 export default function Menu({setMenuOpen, isMenuOpen}: Props) {
-
-    const pathname = usePathname()
     const user = useUsers(state => state.currentUser)
     const { pagesLinks, loginLink} = useMenuLinks(user)
 
-    useEffect(() => {
-        if (isMenuOpen) {
-            setMenuOpen(false)
-        }
-    }, [])
+    const onMenuClose = () => setMenuOpen(false)
 
     return (
         <div className={`${style.menu}${isMenuOpen ? ` ${style.isOpen}` : ''}`}>
             <div className={style.menuTop}>
                 <SwitchTheme/>
-                <CloseButton onClose={() => setMenuOpen(false)}/>
+                <CloseButton onClose={onMenuClose}/>
             </div>
             <ul>
                 {
-                    pagesLinks.map((link) => <MenuLink key={link.url} link={link}/>)
+                    pagesLinks.map((link) => <MenuLink key={link.url} link={link} onClick={onMenuClose}/>)
                 }
             </ul>
             {
                 !user
-                    ? <MenuLink link={loginLink} isList={false}/>
-                    : <LogoutLink/>
+                    ? <MenuLink link={loginLink} isList={false} onClick={onMenuClose}/>
+                    : <LogoutLink onMenuClose={onMenuClose}/>
             }
         </div>
     )
