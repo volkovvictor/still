@@ -11,8 +11,7 @@ export function useGetPhotoshoots () {
     return async () => {
         setIsPhotoshootLoading(true)
         try {
-            const data: IPhotoshoot[] = await apiFetch({ path: PHOTOSHOOT_URL })
-            const photoshoots = data.map(photo => ({ ...photo, id: photo._id }))
+            const photoshoots: IPhotoshoot[] = await apiFetch({ path: PHOTOSHOOT_URL })
 
             setPhotoshoot(photoshoots)
             setIsPhotoshootLoading(false)
@@ -28,11 +27,13 @@ export function useCreatePhotoshoots () {
     const setIsPhotoshootLoading = usePhotoshoots(state => state.setIsPhotoshootLoading)
 
     return async (body: FormData) => {
+         console.log('body', body)
         setIsPhotoshootLoading(true)
         try {
-            const data = await apiFetch({ path: PHOTOSHOOT_URL, method: "POST", body })
+            const data = await apiFetch({ path: PHOTOSHOOT_URL, method: "POST", body, isFormData: true })
+            console.log('data', data)
             setIsPhotoshootLoading(false)
-            return data._id
+            return data?._id
         } catch(err) {
             console.log('err', err)
             setIsPhotoshootLoading(false)

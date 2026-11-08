@@ -1,0 +1,78 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.addFile,
+.addPreview {
+    z-index: 3;
+    width: fit-content;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.previewPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background-color: var(--accent-color)
+}
+
+.addFile input,
+.addPreview input {
+    position: absolute;
+    top: -9999;
+    height: 0;
+    width: 0;
+    opacity: 0;
+}
+.addButton {
+    width: 70px;
+    height: 70px;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: background-color .3s ease;
+}
+
+.addButton svg {
+    transition: transform .3s ease;
+}
+.addFile:hover .addButton,
+.addPreview:hover .addButton {
+    background-color: #b7b7b7;
+}
+
+.addFile:hover .addButton svg,
+.addPreview:hover .addButton svg {
+    transform: scale(1.2);
+}
+
+.addButton:active {
+    background-color: #9a9a9a;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.buttons button {
+    flex: 0 1 50%;
+    padding: 0 10px;
+}
+
+.selects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.selects > div {
+    flex: 0 0 calc(50% - 15px / 2)
+}

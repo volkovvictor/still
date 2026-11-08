@@ -4,175 +4,19 @@ import Icon from '@/ui/icon/Icon'
 import style from '../(style)/modal.module.css'
 import Title from '@/ui/title/Title'
 import locales from '@/locales/locales'
-import Button from '@/ui/button/Button'
-import Select from '@/ui/select/Select'
-import Slider from '@/ui/slider/Slider'
-import { ReactElement, ReactEventHandler, use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { PhotoTypes } from '@/types/photos.type'
-import usePhotos from '@/store/usePhotos'
-import { useCreatePhotos, useDeletePhotos, useGetPhotos } from '@/components/photos/hooks/usePhotosApi'
-import { IOption, IPhotoPreview } from '@/types/general.type'
-import getOptions from '@/utils/addPhotosOptions'
-import { useCreatePhotoshoots, useGetPhotoshoots } from '@/components/photos/hooks/usePhotoshootApi'
-import usePhotoshoots from '@/store/usePhotoshoots'
-import { IPhotoshoot } from '@/types/photoshoots.type'
-import useUsers from '@/store/useUsers'
-import Input from '@/ui/input/Input'
-import Image from 'next/image'
+import AddForm from './addForm/AddForm'
 
 interface Props {
     closeModal: () => void
 }
 
-type PortfolioType = 'new' | number
-
 const locale = locales()
 
-const { categories, portfolioTypes } = getOptions()
-
-
 export default function AddModal({closeModal}: Props) {
-
-    const [files, setFiles] = useState<File[]>([])
-    const [photoshootPreview, setPhotoshootPreview] = useState<File | null>(null)
-    const [selectedCategory, setSelectedCategory] = useState<PhotoTypes>('preview')
-    const [selectedPortfolioType, setSelectedPortfolioType] = useState<PortfolioType>('new')
-    const [selectedUserID, setSelectedUserID] = useState<string | null>(null)
-    const [date, setDate] = useState<string>("")
-
-    const photos = usePhotos(state => state)
-    const photoshoots = usePhotoshoots(state => state.photoshoots)
-    const users = useUsers(state => state.users)
-
-    const usersOptions: IOption[] = useMemo(() => {
-        return users.map(user => ({
-            name: user.fullname,
-            value: user.id
-        }))
-    }, [users])
-
-    const createPhotos = useCreatePhotos()
-    const createPhotoshoots = useCreatePhotoshoots()
-    const getPhotoshoots = useGetPhotoshoots()
-    
-
     const outsideModalClose = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             closeModal()
         }
-    }
-    
-    const photosPosition = useMemo(() => {
-        return photos[selectedCategory].length ? photos[selectedCategory].map(photo => photo.position) : [0]
-    }, [photos, selectedCategory])
-    const lastPosition = useMemo(() => Math.max(...photosPosition), [photosPosition])
-
-    const addPhotoshoot = useCallback(async () => {
-
-        if (!files || !photoshootPreview) return;
-
-        const position = photoshoots.length + 1
-        const formData = new FormData()
-
-        formData.append('previewSrc', photoshootPreview)
-        formData.append('position', String(position))
-        
-        if (date) {
-            formData.append('date', date)
-        }
-
-        const photoshoot = await createPhotoshoots(formData)
-        await getPhotoshoots() 
-
-        return photoshoot
-    }, [files, photoshootPreview, createPhotoshoots, getPhotoshoots, date, photoshoots.length])
-
-    const photosPreviews: IPhotoPreview[] = useMemo(() => files.map(file => (
-        {
-            id: `${file.lastModified}_${file.name}`,
-            url: URL.createObjectURL(file)
-        }
-    )), [files])
-
-    const portfolioPreview: string | null = useMemo(() => {
-        return photoshootPreview ? URL.createObjectURL(photoshootPreview) : null
-    }, [photoshootPreview])
-
-    const onRemovePhotoPreview = useCallback((preview: IPhotoPreview) => {
-        const removedFile = files.find(file => `${file.lastModified}_${file.name}` === preview.id)
-        
-        if (!removedFile) return
-
-        URL.revokeObjectURL(preview.url)
-
-        const newFiles = files.filter(file => `${file.lastModified}_${file.name}` !== preview.id)
-
-        setFiles(newFiles)
-    }, [files])
-    
-
-    useEffect(() => {
-        return () => {
-            photosPreviews.forEach(preview => {
-                URL.revokeObjectURL(preview.url)
-            })
-        }
-    }, [photosPreviews])
-
-    const addPhotos = useCallback((photoshootID: string | null = null) => {
-
-        if (files.length === 0) return
-
-        for (let i = 0; i < files.length; i++) {
-            const formData = new FormData()
-
-            formData.append('src', files[i])
-            formData.append('position', String(lastPosition + i))
-            formData.append('type', selectedCategory)
-
-            if (selectedCategory === 'portfolio') {
-
-                if (selectedUserID) {
-                    formData.append('userID', selectedUserID)
-                }
-
-                if (photoshootID) {
-                    formData.append('photoshootID', photoshootID)
-                }
-            }
-
-            createPhotos(formData)
-        }
-    }, [files, selectedCategory, createPhotos, selectedUserID, lastPosition])
-
-    const onSubmit = useCallback(async (e: React.SubmitEvent) => {
-        e.preventDefault()
-
-        if (selectedCategory === 'portfolio') {
-            const photoshootID = await addPhotoshoot()
-
-            if (photoshootID) {
-                addPhotos(photoshootID)
-            }
-        } else {
-            addPhotos()
-        }
-
-        closeModal()
-    }, [selectedCategory, addPhotos, addPhotoshoot, closeModal])
-
-    const onSelectPhotos = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newFiles = e.target?.files
-
-        if (!newFiles) return
-
-        const filesArray: File[] = []
-
-        for (const file of newFiles) {
-            filesArray.push(file)
-        }
-
-        setFiles(filesArray)
     }
 
     return (
@@ -183,48 +27,7 @@ export default function AddModal({closeModal}: Props) {
                 </div>
                 <div className={style.content}>
                     <Title title={locale.addPhotos} size="3rem"/>
-                        <form className={style.form} onSubmit={onSubmit}>
-                            <div className={style.selects}>
-                                <Select options={categories} label={locale.category} setSelectedOption={(option: PhotoTypes) => setSelectedCategory(option)}/>
-                                    {
-                                        selectedCategory === "portfolio" && (
-                                            <>
-                                                <Select options={portfolioTypes} label={locale.add} setSelectedOption={(option: PortfolioType) => setSelectedPortfolioType(option)}/>
-                                                <Select options={usersOptions} label={locale.account} setSelectedOption={(id: string) => setSelectedUserID(id)}/>
-                                                {/* edit */}
-                                                <Input label={locale.date} name='date' type='date' onChange={setDate} value={date}/> 
-                                            </>
-                                        )
-                                    }
-                            </div>
-                            {
-                                selectedCategory === "portfolio" && <label className={style.addPreview}>
-                                    <input type="file" name="preview" onChange={(e) => setPhotoshootPreview(e.target.files?.[0] || null)}/>
-                                    {
-                                        portfolioPreview
-                                        ? <Image src={portfolioPreview} alt="preview" width={200} height={200}/>
-                                        : (
-                                            <div className={style.previewPlaceholder}>
-                                                <div className={style.addButton}>
-                                                    <Icon name="add" size={50}/>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                            </label>
-                            }
-                            <label className={style.addFile}>
-                                <input type="file" name="photo" multiple onChange={onSelectPhotos}/>
-                                <div className={style.addButton}>
-                                    <Icon name="add" size={50}/>
-                                </div>
-                            </label>
-                            <Slider previews={photosPreviews} onRemove={onRemovePhotoPreview}/>
-                            <div className={style.buttons}>
-                                <Button>{locale.add}</Button>
-                                <Button onClick={closeModal}>{locale.cancel}</Button>
-                            </div>
-                    </form>
+                        <AddForm closeModal={closeModal}/>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ import { useDeletePhotos, useUpdatePhotosOrder } from '@/components/photos/hooks
 import useUsers from '@/store/useUsers';
 import { useRouter } from 'next/navigation';
 import Loader from '@/ui/loader/Loader';
+import { useGetAllUsers } from '@/hooks/useUsersApi';
 
 const locale = locales()
 
@@ -41,7 +42,7 @@ export default function Admin() {
     const router = useRouter()
 
     const photos = usePhotos()
-
+    
     const user = useUsers(state => state.currentUser)
     const isCurrentUserLoading = useUsers(state => state.isCurrentUserLoading)
 
@@ -51,6 +52,8 @@ export default function Admin() {
 
     const updatePhotosOrder = useUpdatePhotosOrder()
     const deletePhotos = useDeletePhotos()
+
+    const getAllUsers = useGetAllUsers()
 
     const [ tabs, setTabs ] = useState<ITabs[]>(defTabs)
     const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
@@ -69,13 +72,17 @@ export default function Admin() {
         setActiveTab(val)
     }, [])
 
+    // useEffect(() => {
+    //     console.log('user?.role', user?.role)
+    //     // if (user?.role !== "admin" && !isCurrentUserLoading) {
+    //     //     router.push("/")
+    //     // }
+    //     console.log('isCurrentUserLoading', isCurrentUserLoading)
+    // }, [user, isCurrentUserLoading])
+
     useEffect(() => {
-        console.log('user?.role', user?.role)
-        // if (user?.role !== "admin" && !isCurrentUserLoading) {
-        //     router.push("/")
-        // }
-        console.log('isCurrentUserLoading', isCurrentUserLoading)
-    }, [user, isCurrentUserLoading])
+        getAllUsers()
+    }, [])
 
     useEffect(() => {
         if (isEdit) {

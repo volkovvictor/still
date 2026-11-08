@@ -9,3 +9,5 @@ export const LOGIN_URL = `${AUTH_URL}/login`
 export const REGISTER_URL = `${AUTH_URL}/register`
 export const LOGOUT_URL = `${AUTH_URL}/logout`
 export const REFRESH_URL = `${AUTH_URL}/refresh`
+
+export const USERS_URL = `${BASE_URL}/users`

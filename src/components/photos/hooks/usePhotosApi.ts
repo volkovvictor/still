@@ -17,6 +17,7 @@ export function useGetPhotos () {
 
             setPhotos(photosType, photos)
             setIsPhotosLoading(false)
+            
         } catch(err) {
             console.log('err', err)
             setIsPhotosLoading(false)

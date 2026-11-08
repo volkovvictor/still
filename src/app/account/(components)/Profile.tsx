@@ -8,8 +8,6 @@ export default function Profile() {
 
     const user = useUsers(state => state.currentUser)
 
-    console.log('user', user)
-
     return (
         <div style={{ position: 'relative' }}>
             {
