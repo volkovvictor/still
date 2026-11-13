@@ -1,6 +1,7 @@
 import Photos from "@/components/photos/Photos";
 import Title from "@/ui/title/Title";
 import type { IPhoto } from "@/types/photos.type";
+import apiFetch from "@/utils/apiFetch";
 
 interface Props {
     params: Promise<{ photoshootID: string }>

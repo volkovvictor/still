@@ -20,6 +20,8 @@ import { useRouter } from 'next/navigation';
 import Loader from '@/ui/loader/Loader';
 import { useGetAllUsers } from '@/hooks/useUsersApi';
 import usePhotoshoots from '@/store/usePhotoshoots';
+import PhotoshootHead from './photoshootHead/PhotoshootHead';
+import { useDeletePhotoshoots } from '@/components/photos/hooks/usePhotoshootApi';
 
 const locale = locales()
 
@@ -53,6 +55,7 @@ export default function Admin() {
 
     const updatePhotosOrder = useUpdatePhotosOrder()
     const deletePhotos = useDeletePhotos()
+    const deletePhotoshoots = useDeletePhotoshoots()
 
     const getAllUsers = useGetAllUsers()
 
@@ -62,9 +65,9 @@ export default function Admin() {
     const [ isEdit, setIsEdit ] = useState<boolean>(false)
     const [ photoshootId, setPhotoshootId ] = useState<string>("")
 
-    const { isSelectAllChecked, selectedIds, toggleAllCheck, clearAll } = useAllCheck()
+    const { isSelectAllChecked, selectedIds, toggleCheck, clearAll } = useAllCheck()
 
-    const isPhotoshootsPreviews = activeTab ==="portfolio" && !photoshootId
+    const isPhotoshootsPreviews = useMemo(() => activeTab ==="portfolio" && !photoshootId, [activeTab, photoshootId])
 
     const photosIds =  useMemo(() => {
         return isPhotoshootsPreviews
@@ -73,8 +76,8 @@ export default function Admin() {
     }, [isPhotoshootsPreviews, activeTab, photos, photoshoots])
 
     const onChange = useCallback((val: boolean) => {
-        toggleAllCheck(photosIds, val)
-    }, [photosIds, toggleAllCheck])
+        toggleCheck(photosIds, val)
+    }, [photosIds, toggleCheck])
 
     const onChangeTab = useCallback((val: PhotoTypes) => {
         if (val === 'preview') {
@@ -88,19 +91,17 @@ export default function Admin() {
     }, [])
 
     useEffect(() => {
-        if (isEdit) {
-            clearAll()
-        }
-    }, [isEdit, clearAll])
+        clearAll()
+    }, [isEdit, clearAll, activeTab, photoshootId])
 
     useEffect(() => {
         if (selectedIds.length < photosIds.length) {
-            toggleAllCheck(photosIds, false)
+            toggleCheck(photosIds, false)
         }
         if (selectedIds.length === photosIds.length) {
-            toggleAllCheck(photosIds, true)
+            toggleCheck(photosIds, true)
         }
-    }, [photosIds, toggleAllCheck, selectedIds])
+    }, [photosIds, toggleCheck, selectedIds])
 
     const onCloseEditing = useCallback(() => {
         cleanNewOrder()
@@ -113,8 +114,14 @@ export default function Admin() {
     }, [newOrder, onCloseEditing, updatePhotosOrder])
 
     const onDeleteMany = useCallback(() => {
-        deletePhotos('preview', selectedIds)
-    }, [selectedIds, deletePhotos])
+        if (isPhotoshootsPreviews) {
+            deletePhotoshoots(selectedIds)
+        } else if (isSelectAllChecked && photoshootId) {
+             deletePhotoshoots([photoshootId])
+        } else {
+            deletePhotos(activeTab, selectedIds)
+        }
+    }, [selectedIds, deletePhotos, isPhotoshootsPreviews, deletePhotoshoots, activeTab])
 
     const onClickPhotoshoot = (id: string) => {
         setPhotoshootId(id)
@@ -163,8 +170,7 @@ export default function Admin() {
                                     </div>
                                 </div>
                                 {
-                                    // edit
-                                    photoshootId && <div onClick={() => setPhotoshootId("")}>Назад</div>
+                                    photoshootId && <PhotoshootHead photoshootId={photoshootId} setPhotoshootId={setPhotoshootId}/>
                                 }
                                 {
                                     isEdit && (

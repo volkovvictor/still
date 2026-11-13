@@ -86,8 +86,6 @@ export function useRefresh () {
             credentials: "include"
         })
 
-        console.log('res', res)
-
         setToken(res.accessToken || null)
         setCurrentUser(res.user || null)
     }

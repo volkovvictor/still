@@ -28,19 +28,15 @@ const locale = locales()
 export default function AddForm({ closeModal }: Props) {
     const [selectedCategory, setSelectedCategory] = useState<PhotoTypes>('preview')
     const [selectedPortfolioType, setSelectedPortfolioType] = useState<PortfolioType>('new')
-    const [selectedUserID, setSelectedUserID] = useState<string | null>(null)
+    const [selectedUserID, setSelectedUserID] = useState<string>("")
     const [date, setDate] = useState<string>("")
     const [files, setFiles] = useState<File[]>([])
     const [photoshootPreview, setPhotoshootPreview] = useState<File | null>(null)
 
     const onHandleOptions = useHandleOptions()
 
-    useEffect(() => {
-        console.log('selectedCategory', selectedCategory)
-    }, [selectedCategory])
-
     const addPhotos = useAddPhotos({ files, selectedCategory, selectedUserID })
-    const addPhotoshoot = useAddPhotoshoot({ photoshootPreview, date, files })
+    const addPhotoshoot = useAddPhotoshoot({ photoshootPreview, date, files, selectedUserID })
 
     const { photosPreviews, portfolioPreview } = usePreviews({ files, photoshootPreview })
 
@@ -101,7 +97,7 @@ export default function AddForm({ closeModal }: Props) {
                 date={date}
                 onSelectCategory={onHandleOptions<PhotoTypes>(setSelectedCategory)}
                 onSelectPortfolioType={onHandleOptions<PortfolioType>(setSelectedPortfolioType)}
-                onSelectUser={onHandleOptions<string | null>(setSelectedUserID)}
+                onSelectUser={onHandleOptions<string>(setSelectedUserID)}
                 onSetDate={onHandleOptions<string>(setDate)}/>
             {
                 selectedCategory === "portfolio" && <label className={style.addPreview}>

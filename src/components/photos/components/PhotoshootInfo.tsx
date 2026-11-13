@@ -1,7 +1,9 @@
+import useGetUser from '@/hooks/useGetUser'
 import style from '../style/photos.module.css'
 import { IPhoto } from "@/types/photos.type"
 import { IPhotoshoot } from '@/types/photoshoots.type'
 import Link from 'next/link'
+import convertDate from '@/utils/convertDate'
 
 interface Props {
     pathname: string,
@@ -10,10 +12,14 @@ interface Props {
 }
 
 function PhotoshootInfoChildren({photo}:Pick<Props, 'photo'>) {
+
+    const user = useGetUser(photo.userID || "")
+    const date = convertDate(photo.date || "")
+
     return (
         <>
-            <div>{photo.userID}</div>
-            <div>{photo.date}</div>
+            { user && <div>{user.fullname}</div> }
+            <div>{date}</div>
         </>
     )
 }
@@ -21,5 +27,5 @@ function PhotoshootInfoChildren({photo}:Pick<Props, 'photo'>) {
 export default function PhotoshootInfo({ pathname, photo, onClick }: Props) {
     return pathname === "/portfolio"
         ? <Link href={`/portfolio/${photo._id}`} className={style.info}><PhotoshootInfoChildren photo={photo}/></Link>
-        : <div onClick={onClick} className={style.info}><PhotoshootInfoChildren photo={photo}/></div>
+        : <div style={{ cursor: "pointer" }} onClick={onClick} className={style.info}><PhotoshootInfoChildren photo={photo}/></div>
 }

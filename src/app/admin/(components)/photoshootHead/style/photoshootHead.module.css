@@ -1,0 +1,14 @@
+.photoshootHead {
+    display: flex;
+    align-items: center;
+}
+.photoshootInfo {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back {
+    cursor: pointer;
+}

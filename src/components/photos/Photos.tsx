@@ -21,7 +21,7 @@ export default function Photos({ isEdit = false, activeTab, photoshootId, onClic
     const previewType = pathname === '/' && 'preview'
     const portfolioType = pathname.includes('portfolio') && 'portfolio'
     const accountType = pathname.includes('account') && 'account'
-    const photoshootID = useMemo(() => (portfolioType || adminPanelType === 'portfolio') && (photoshootId || params.photoshootID), [photoshootId,  params.photoshootID, portfolioType, adminPanelType])
+    const photoshootID = useMemo(() => (portfolioType || adminPanelType === 'portfolio') && (photoshootId || params.photoshootID as string), [photoshootId,  params.photoshootID, portfolioType, adminPanelType])
 
     const photosType: PhotoTypes | false = adminPanelType || previewType || portfolioType || accountType
     

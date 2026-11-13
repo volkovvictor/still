@@ -14,3 +14,16 @@ export function useGetAllUsers() {
         .then((users: IUser[]) => setUsers(users))
     }
 }
+
+export function useGetUserById() {
+    return async (id: string) => {
+        if (!id) return null
+        
+        try {
+            return await apiFetch({ path: `${USERS_URL}/${id}` })
+        } catch(err) {
+            console.log('err', err)
+            return null
+        }
+    }
+}

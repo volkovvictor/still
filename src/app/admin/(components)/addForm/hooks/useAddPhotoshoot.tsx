@@ -6,10 +6,11 @@ import usePhotoshoots from "@/store/usePhotoshoots"
 interface Props {
     photoshootPreview: File | null
     files: File[]
-    date: string
+    date: string,
+    selectedUserID?: string
 }
 
-export default function useAddPhotoshoot({ photoshootPreview, date, files }: Props) {
+export default function useAddPhotoshoot({ photoshootPreview, date, files, selectedUserID }: Props) {
 
     const photoshoots = usePhotoshoots(state => state.photoshoots)
 
@@ -29,8 +30,10 @@ export default function useAddPhotoshoot({ photoshootPreview, date, files }: Pro
             if (date) {
                 formData.append('date', date)
             }
-    
-            console.log('formData', formData)
+
+            if (selectedUserID) {
+                formData.append('userID', selectedUserID)
+            }
     
             const photoshoot = await createPhotoshoots(formData)
             await getPhotoshoots() 

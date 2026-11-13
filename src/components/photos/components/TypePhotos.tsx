@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import SortablePhoto from './SortablePhotos'
 import Cells from './Cells'
 import { useDeletePhotos, useGetPhotos } from '../hooks/usePhotosApi'
-import { useGetPhotoshoots } from '../hooks/usePhotoshootApi'
+import { useDeletePhotoshoots, useGetPhotoshoots } from '../hooks/usePhotoshootApi'
 import usePhotos from '@/store/usePhotos'
 import Empty from '@/components/empty/Empty'
 import locales from '@/locales/locales'
@@ -21,7 +21,7 @@ import { IOrder } from '@/types/general.type'
 
 interface Props {
     photosType: PhotoTypes,
-    photoshootID?: ParamValue | false,
+    photoshootID?: string | false,
     onClickPhotoshoot?: (id: string) => void,
     isEdit: boolean
 }
@@ -31,6 +31,7 @@ export default function TypePhotos({photosType, photoshootID, isEdit, onClickPho
     const getPhotos = useGetPhotos()
     const getPhotoshoots = useGetPhotoshoots()
     const deletePhoto = useDeletePhotos()
+    const deletePhotoshoot = useDeletePhotoshoots()
 
     const setNewOrder = usePhotos(state => state.setNewOrder)
 
@@ -50,7 +51,6 @@ export default function TypePhotos({photosType, photoshootID, isEdit, onClickPho
     }, [photosType, isPhotoshootsPreviews])
 
     const photos = useMemo(() => {
-        console.log('photoshootID', photoshootID)
         return isPhotoshootsPreviews 
         ? photoshoots : photoshootID
             ? photosByType.filter(photo => photo.photoshootID === photoshootID)
@@ -62,8 +62,14 @@ export default function TypePhotos({photosType, photoshootID, isEdit, onClickPho
     }, [photos])
 
     const onDelete = useCallback((id: string) => {
-        deletePhoto(photosType, [id])
-    }, [photosType, deletePhoto])
+        if (isPhotoshootsPreviews) {
+            deletePhotoshoot([id])
+        } else if (photos.length === 1 && photoshootID) {
+              deletePhotoshoot([photoshootID])
+        } else {
+            deletePhoto(photosType, [id])
+        }
+    }, [photosType, deletePhoto, isPhotoshootsPreviews, deletePhotoshoot])
 
     const cells = useMemo(() => {
         const cellsData = []
@@ -94,7 +100,6 @@ export default function TypePhotos({photosType, photoshootID, isEdit, onClickPho
                             )
                         }
                         <DragDropProvider onDragEnd={(e) => {
-                            console.log('old photos', photos)
                             const photosIDs = photos.map(photo => photo._id)
                             const reordered = move(photosIDs, e)
                             const newPhotosArray: IOrder[] = reordered.map((id, index) => {

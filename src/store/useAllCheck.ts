@@ -5,7 +5,7 @@ interface AllCheckState {
     isSelectAllChecked: boolean,
     // setAllIds: (ids: string[]) => void,
     onSelectId: (id: string, val: boolean) => void
-    toggleAllCheck: (ids: string[], val: boolean) => void,
+    toggleCheck: (ids: string[], val: boolean) => void,
     clearAll: () => void
 
 }
@@ -21,7 +21,7 @@ const useAllCheck = create<AllCheckState>((set) => ({
             [...state.selectedIds, id] : 
             state.selectedIds.filter(selectedId => selectedId !== id)
     })),
-    toggleAllCheck: (allIds, val) => set(state => ({
+    toggleCheck: (allIds, val) => set(state => ({
         isSelectAllChecked: val,
         selectedIds: val === true ? allIds : allIds.length === state.selectedIds.length ? [] : state.selectedIds
     })),
