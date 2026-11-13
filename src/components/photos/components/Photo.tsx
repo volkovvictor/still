@@ -2,7 +2,7 @@
 
 import style from '../style/photos.module.css'
 import Image from "next/image"
-import type { IPhoto } from '@/types/photos.type'
+import type { IPhoto, PhotoTypes } from '@/types/photos.type'
 import Link from 'next/link'
 import Icon from '@/ui/icon/Icon'
 import Button from '@/ui/button/Button'
@@ -12,18 +12,22 @@ import Checkbox from '@/ui/checkbox/Checkbox'
 import { useCallback, useEffect, useMemo } from 'react'
 import useAllCheck from '@/store/useAllCheck'
 import { IPhotoshoot } from '@/types/photoshoots.type'
+import PhotoshootInfo from './PhotoshootInfo'
 
 interface Props {
     photo: IPhoto | IPhotoshoot,
-    onDelete: () => void,
-    onLike: () => void,
+    photosType: PhotoTypes,
+    onDelete?: () => void,
+    onLike?: () => void,
+    onClickPhotoshoot?: () => void,
     ref?: (element: Element | null) => void,
-    isEdit?: boolean
+    isEdit?: boolean,
+    photoshootID?: string
 }
 
 const locale = locales()
 
-export default function Photo({photo, onLike, onDelete, ref, isEdit}: Props) {
+export default function Photo({photo, photosType, photoshootID, onLike, onDelete, onClickPhotoshoot, ref, isEdit}: Props) {
 
     const selectedIds = useAllCheck(state => state.selectedIds)
     const onSelectId = useAllCheck(state => state.onSelectId)
@@ -60,12 +64,7 @@ export default function Photo({photo, onLike, onDelete, ref, isEdit}: Props) {
                     )
                 }
                 {
-                    pathname === "/portfolio" && (
-                        <Link href={`/portfolio/${photo._id}`} className={style.info}>
-                            <div>{photo.userId}</div> {/* photo.userId */}
-                            <div>{photo.date}</div> {/* photo.date */}
-                        </Link>
-                    )
+                    (photosType === "portfolio" && !photoshootID) && <PhotoshootInfo photo={photo} pathname={pathname} onClick={onClickPhotoshoot}/>
                 }
             </div>
             {

@@ -19,6 +19,7 @@ import useUsers from '@/store/useUsers';
 import { useRouter } from 'next/navigation';
 import Loader from '@/ui/loader/Loader';
 import { useGetAllUsers } from '@/hooks/useUsersApi';
+import usePhotoshoots from '@/store/usePhotoshoots';
 
 const locale = locales()
 
@@ -39,8 +40,6 @@ export default function Admin() {
 
     const { MAIN_COLOR } = useColors()
 
-    const router = useRouter()
-
     const photos = usePhotos()
     
     const user = useUsers(state => state.currentUser)
@@ -49,6 +48,8 @@ export default function Admin() {
     const cleanNewOrder = usePhotos(state => state.cleanNewOrder)
     const newOrder = usePhotos(state => state.newOrder)
     const isPhotosLoading = usePhotos(state => state.isPhotosLoading)
+
+    const photoshoots = usePhotoshoots(state => state.photoshoots)
 
     const updatePhotosOrder = useUpdatePhotosOrder()
     const deletePhotos = useDeletePhotos()
@@ -59,26 +60,28 @@ export default function Admin() {
     const [activeTab, setActiveTab] = useState<PhotoTypes>("preview")
     const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false)
     const [ isEdit, setIsEdit ] = useState<boolean>(false)
+    const [ photoshootId, setPhotoshootId ] = useState<string>("")
 
     const { isSelectAllChecked, selectedIds, toggleAllCheck, clearAll } = useAllCheck()
 
-    const photosIds = useMemo(() => photos[activeTab].map(photo => photo._id), [activeTab, photos])
+    const isPhotoshootsPreviews = activeTab ==="portfolio" && !photoshootId
+
+    const photosIds =  useMemo(() => {
+        return isPhotoshootsPreviews
+            ? photoshoots.map(photoshoot => photoshoot._id)
+            : photos[activeTab].map(photo => photo._id)
+    }, [isPhotoshootsPreviews, activeTab, photos, photoshoots])
 
     const onChange = useCallback((val: boolean) => {
         toggleAllCheck(photosIds, val)
     }, [photosIds, toggleAllCheck])
 
     const onChangeTab = useCallback((val: PhotoTypes) => {
+        if (val === 'preview') {
+            setPhotoshootId("")
+        }
         setActiveTab(val)
     }, [])
-
-    // useEffect(() => {
-    //     console.log('user?.role', user?.role)
-    //     // if (user?.role !== "admin" && !isCurrentUserLoading) {
-    //     //     router.push("/")
-    //     // }
-    //     console.log('isCurrentUserLoading', isCurrentUserLoading)
-    // }, [user, isCurrentUserLoading])
 
     useEffect(() => {
         getAllUsers()
@@ -112,6 +115,10 @@ export default function Admin() {
     const onDeleteMany = useCallback(() => {
         deletePhotos('preview', selectedIds)
     }, [selectedIds, deletePhotos])
+
+    const onClickPhotoshoot = (id: string) => {
+        setPhotoshootId(id)
+    }
 
     return (
         <div style={{ position: "relative" }}>
@@ -156,6 +163,10 @@ export default function Admin() {
                                     </div>
                                 </div>
                                 {
+                                    // edit
+                                    photoshootId && <div onClick={() => setPhotoshootId("")}>Назад</div>
+                                }
+                                {
                                     isEdit && (
                                         <div className={style.editBlock}>
                                             <Button buttonSize='small' onClick={onReorder}>{locale.save}</Button>
@@ -163,7 +174,7 @@ export default function Admin() {
                                         </div>
                                     )
                                 }
-                                <Photos isEdit={isEdit} activeTab={activeTab}/>
+                                <Photos isEdit={isEdit} activeTab={activeTab} photoshootId={photoshootId} onClickPhotoshoot={onClickPhotoshoot}/>
                             </div>
                             {
                                 isModalOpen && <AddModal closeModal={() => setIsModalOpen(false)}/>

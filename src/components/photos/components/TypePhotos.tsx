@@ -22,10 +22,11 @@ import { IOrder } from '@/types/general.type'
 interface Props {
     photosType: PhotoTypes,
     photoshootID?: ParamValue | false,
+    onClickPhotoshoot?: (id: string) => void,
     isEdit: boolean
 }
 
-export default function TypePhotos({photosType, photoshootID, isEdit}: Props) {
+export default function TypePhotos({photosType, photoshootID, isEdit, onClickPhotoshoot}: Props) {
     const locale = locales()
     const getPhotos = useGetPhotos()
     const getPhotoshoots = useGetPhotoshoots()
@@ -49,14 +50,12 @@ export default function TypePhotos({photosType, photoshootID, isEdit}: Props) {
     }, [photosType, isPhotoshootsPreviews])
 
     const photos = useMemo(() => {
+        console.log('photoshootID', photoshootID)
         return isPhotoshootsPreviews 
         ? photoshoots : photoshootID
             ? photosByType.filter(photo => photo.photoshootID === photoshootID)
             : photosByType
     }, [photoshootID, photosByType, isPhotoshootsPreviews, photoshoots])
-
-    // const sortedPhotos = useMemo(() => photos.sort((prev, next) => prev.position - next.position), [photos])
-    // console.log('photos', photos)
     
     const onLike = useCallback((id: string) => {
         const likedPhoto = photos.find(photo => photo._id === id) // edit
@@ -114,17 +113,19 @@ export default function TypePhotos({photosType, photoshootID, isEdit}: Props) {
                                             return <SortablePhoto 
                                                     key={photo._id}
                                                     photo={photo}
-                                                    onDelete={() => onDelete(photo._id)}
-                                                    onLike={() => onLike(photo._id)}
                                                     index={index}
-                                                    isEdit={isEdit}/>
+                                                    isEdit={isEdit}
+                                                    photosType={photosType}/>
                                         }
 
                                         return <Photo 
                                                 key={photo._id} 
                                                 photo={photo}
+                                                photosType={photosType}
+                                                photoshootID={photoshootID}
                                                 onDelete={() => onDelete(photo._id)}
-                                                onLike={() => onLike(photo._id)} />
+                                                onLike={() => onLike(photo._id)}
+                                                onClickPhotoshoot={() => onClickPhotoshoot?.(photo._id)} />
                                     })
                                 }
                             </div>

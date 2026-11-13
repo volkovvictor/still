@@ -14,6 +14,6 @@ export interface IPhoto {
     isAddedToCart?: boolean,
     isSelled?: boolean,
     photoshootID?: string,
-    userId?: string,
+    userID?: string,
     date?: string,
 }

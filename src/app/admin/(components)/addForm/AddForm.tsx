@@ -15,9 +15,10 @@ import locales from '@/locales/locales';
 import useAddPhotos from './hooks/useAddPhotos';
 import useAddPhotoshoot from './hooks/useAddPhotoshoot';
 import usePreviews from './hooks/usePreviews';
-import useHandleOptions from './hooks/useHandleOptions';
 import AddFormSelects from './components/AddFormSelects';
+import useHandleOptions from './hooks/useHandleOptions';
 
+export type PortfolioType = 'new' | number
 interface Props {
     closeModal: () => void
 }
@@ -25,14 +26,18 @@ interface Props {
 const locale = locales()
 
 export default function AddForm({ closeModal }: Props) {
+    const [selectedCategory, setSelectedCategory] = useState<PhotoTypes>('preview')
+    const [selectedPortfolioType, setSelectedPortfolioType] = useState<PortfolioType>('new')
+    const [selectedUserID, setSelectedUserID] = useState<string | null>(null)
+    const [date, setDate] = useState<string>("")
     const [files, setFiles] = useState<File[]>([])
     const [photoshootPreview, setPhotoshootPreview] = useState<File | null>(null)
 
-    const {
-        selectedCategory,
-        selectedUserID,
-        date,
-    } = useHandleOptions()
+    const onHandleOptions = useHandleOptions()
+
+    useEffect(() => {
+        console.log('selectedCategory', selectedCategory)
+    }, [selectedCategory])
 
     const addPhotos = useAddPhotos({ files, selectedCategory, selectedUserID })
     const addPhotoshoot = useAddPhotoshoot({ photoshootPreview, date, files })
@@ -91,7 +96,13 @@ export default function AddForm({ closeModal }: Props) {
 
     return (
         <form className={style.form} onSubmit={onSubmit}>
-            <AddFormSelects/>
+            <AddFormSelects 
+                selectedCategory={selectedCategory}
+                date={date}
+                onSelectCategory={onHandleOptions<PhotoTypes>(setSelectedCategory)}
+                onSelectPortfolioType={onHandleOptions<PortfolioType>(setSelectedPortfolioType)}
+                onSelectUser={onHandleOptions<string | null>(setSelectedUserID)}
+                onSetDate={onHandleOptions<string>(setDate)}/>
             {
                 selectedCategory === "portfolio" && <label className={style.addPreview}>
                     <input type="file" name="preview" onChange={(e) => setPhotoshootPreview(e.target.files?.[0] || null)}/>

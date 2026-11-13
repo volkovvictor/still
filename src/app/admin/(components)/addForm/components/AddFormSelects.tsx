@@ -4,33 +4,32 @@ import useOptions from '../hooks/useOptions'
 import locales from '@/locales/locales'
 import { PhotoTypes } from '@/types/photos.type'
 import Input from '@/ui/input/Input'
-import useHandleOptions from '../hooks/useHandleOptions'
+import { PortfolioType } from '../AddForm'
 
-export type PortfolioType = 'new' | number
+interface Props {
+    selectedCategory: PhotoTypes,
+    date: string,
+    onSelectCategory: (option: PhotoTypes) => void
+    onSetDate: (date: string) => void
+    onSelectUser: (id: string) => void
+    onSelectPortfolioType: (type: PortfolioType) => void
 
-export default function AddFormSelects() {
+}
+
+export default function AddFormSelects(props: Props) {
     const locale = locales()
     const { categories, portfolioTypes, usersOptions } = useOptions()
 
-    const {
-        selectedCategory,
-        setSelectedCategory,
-        setSelectedPortfolioType,
-        setSelectedUserID,
-        date,
-        setDate
-    } = useHandleOptions()
-
     return (
         <div className={style.selects}>
-                <Select options={categories} label={locale.category} setSelectedOption={(option: PhotoTypes) => setSelectedCategory(option)}/>
+                <Select options={categories} label={locale.category} setSelectedOption={(option: PhotoTypes) => props.onSelectCategory(option)}/>
                     {
-                        selectedCategory === "portfolio" && (
+                        props.selectedCategory === "portfolio" && (
                             <>
-                                <Select options={portfolioTypes} label={locale.add} setSelectedOption={(option: PortfolioType) => setSelectedPortfolioType(option)}/>
-                                <Select options={usersOptions} label={locale.account} setSelectedOption={(id: string) => setSelectedUserID(id)}/>
+                                <Select options={portfolioTypes} label={locale.add} setSelectedOption={(option: PortfolioType) => props.onSelectPortfolioType(option)}/>
+                                <Select options={usersOptions} label={locale.account} setSelectedOption={(id: string) => props.onSelectUser(id)}/>
                                 {/* edit */}
-                                <Input label={locale.date} name='date' type='date' onChange={setDate} value={date}/> 
+                                <Input label={locale.date} name='date' type='date' onChange={props.onSetDate} value={props.date}/> 
                             </>
                         )
                     }
