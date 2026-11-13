@@ -35,10 +35,18 @@ export default function useOptions () {
     ), [])
 
     const usersOptions: IOption[] = useMemo(() => {
-            return users.map(user => ({
+            const allUsers = users.map(user => ({
                 name: user.fullname,
                 value: user._id
             }))
+
+            return [
+                {
+                    name: locale.notSelected,
+                    value: ""
+                },
+                ...allUsers
+            ]
         }, [users])
 
     return { categories, portfolioTypes, usersOptions }
